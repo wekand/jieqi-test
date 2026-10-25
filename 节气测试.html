@@ -1,0 +1,2772 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>二十四节气人格测试</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&display=swap');
+  
+  :root {
+    --bg: #F5F2ED;
+    --bg-card: #FBF9F5;
+    --ink: #3D3D3D;
+    --ink-light: #7A746B;
+    --ink-faint: #B5ADA2;
+    --line: #E5DED3;
+    --accent: #8B7D6B;
+    --spring: #A8C3A0;
+    --summer: #D4A5A5;
+    --autumn: #C4A882;
+    --winter: #A8B5C4;
+    --spring-deep: #7BA084;
+    --summer-deep: #B07878;
+    --autumn-deep: #A08454;
+    --winter-deep: #7A94A8;
+  }
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  html, body {
+    font-family: 'Noto Serif SC', 'Songti SC', serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.8;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  
+  body {
+    background-image: 
+      radial-gradient(circle at 15% 20%, rgba(168,195,160,0.06) 0%, transparent 45%),
+      radial-gradient(circle at 85% 80%, rgba(212,165,165,0.06) 0%, transparent 45%),
+      radial-gradient(circle at 50% 50%, rgba(196,168,130,0.03) 0%, transparent 60%);
+  }
+  
+  .container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* 背景装饰 - 二十四节气水印 */
+  .bg-decor {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  
+  .bg-term {
+    position: absolute;
+    font-size: 120px;
+    color: var(--ink-faint);
+    opacity: 0.04;
+    font-weight: 700;
+    letter-spacing: 4px;
+    user-select: none;
+  }
+  
+  /* 开场动画 */
+  .intro {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--bg);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  
+  .intro-circle {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    margin-bottom: 40px;
+  }
+  
+  .intro-term {
+    position: absolute;
+    font-size: 13px;
+    color: var(--accent);
+    opacity: 0;
+    letter-spacing: 2px;
+    animation: termFade 2.5s ease forwards;
+    white-space: nowrap;
+  }
+  
+  @keyframes termFade {
+    0% { opacity: 0; transform: translateY(10px) scale(0.8); }
+    20% { opacity: 1; transform: translateY(0) scale(1); }
+    80% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-10px) scale(0.9); }
+  }
+  
+  .intro-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    opacity: 0;
+    animation: centerFade 1.5s ease 2s forwards;
+  }
+  
+  @keyframes centerFade {
+    to { opacity: 1; }
+  }
+  
+  .intro-title {
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: 12px;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  
+  .intro-sub {
+    font-size: 14px;
+    color: var(--ink-light);
+    letter-spacing: 6px;
+  }
+  
+  .intro-line {
+    width: 0;
+    height: 1px;
+    background: var(--accent);
+    margin: 24px auto;
+    animation: lineGrow 1s ease 2.5s forwards;
+  }
+  
+  @keyframes lineGrow {
+    to { width: 60px; }
+  }
+  
+  .intro-hint {
+    font-size: 12px;
+    color: var(--ink-faint);
+    letter-spacing: 3px;
+    opacity: 0;
+    animation: hintFade 1s ease 3s forwards;
+  }
+  
+  @keyframes hintFade {
+    to { opacity: 1; }
+  }
+  
+  .intro.fade-out {
+    animation: introOut 0.8s ease forwards;
+  }
+  
+  @keyframes introOut {
+    to { opacity: 0; visibility: hidden; }
+  }
+  
+  /* 装饰元素 */
+  .ornament {
+    text-align: center;
+    color: var(--ink-faint);
+    font-size: 20px;
+    margin: 16px 0;
+    letter-spacing: 8px;
+  }
+  
+  /* 开始页 */
+  .start-page {
+    text-align: center;
+    padding: 20px 0 40px;
+    animation: pageIn 0.8s ease;
+    position: relative;
+  }
+  
+  .start-ink-decor {
+    width: 100%;
+    height: 80px;
+    margin-bottom: 8px;
+    opacity: 0.6;
+  }
+  
+  .start-season-ring {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 20px;
+    position: relative;
+  }
+  
+  .start-season-ring svg {
+    width: 100%;
+    height: 100%;
+    animation: ringRotate 60s linear infinite;
+  }
+  
+  @keyframes ringRotate {
+    to { transform: rotate(360deg); }
+  }
+  
+  .start-ring-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  
+  .start-ring-center .char {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 2px;
+    line-height: 1.3;
+  }
+  
+  @keyframes pageIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .start-page .badge {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 6px;
+    color: var(--accent);
+    margin-bottom: 36px;
+    padding: 6px 20px;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+  }
+  
+  .start-page h1 {
+    font-size: 44px;
+    font-weight: 700;
+    letter-spacing: 10px;
+    color: var(--ink);
+    margin-bottom: 14px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+  
+  .start-page .subtitle {
+    font-size: 14px;
+    color: var(--ink-light);
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+  }
+  
+  .start-page .divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 32px 0;
+  }
+  
+  .start-page .divider::before,
+  .start-page .divider::after {
+    content: '';
+    width: 50px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--ink-faint));
+  }
+  .start-page .divider::after {
+    background: linear-gradient(90deg, var(--ink-faint), transparent);
+  }
+  
+  .divider-icon {
+    font-size: 14px;
+    color: var(--accent);
+  }
+  
+  .start-page .desc {
+    font-size: 14px;
+    color: var(--ink-light);
+    line-height: 2.2;
+    max-width: 420px;
+    margin: 0 auto 44px;
+  }
+  
+  /* 四季图标 */
+  .season-icons {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    margin-bottom: 44px;
+  }
+  
+  .season-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    transition: all 0.3s ease;
+  }
+  
+  .season-icon:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+  }
+  
+  .season-icon.spring { color: var(--spring-deep); }
+  .season-icon.summer { color: var(--summer-deep); }
+  .season-icon.autumn { color: var(--autumn-deep); }
+  .season-icon.winter { color: var(--winter-deep); }
+  
+  .start-page .stats {
+    display: flex;
+    justify-content: center;
+    gap: 36px;
+    margin-bottom: 48px;
+  }
+  
+  .stat-item {
+    text-align: center;
+  }
+  
+  .stat-num {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+  
+  .stat-label {
+    font-size: 12px;
+    color: var(--ink-faint);
+    letter-spacing: 2px;
+    margin-top: 4px;
+  }
+  
+  .btn {
+    display: inline-block;
+    padding: 16px 60px;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    font-family: inherit;
+    font-size: 15px;
+    letter-spacing: 6px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn:hover {
+    background: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(139,125,107,0.25);
+  }
+  
+  .btn-outline {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+  }
+  
+  .btn-outline:hover {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  
+  /* 答题页 */
+  .quiz-page {
+    display: none;
+    animation: pageIn 0.5s ease;
+  }
+  
+  .quiz-page.active { display: block; }
+  
+  .progress { margin-bottom: 40px; }
+  
+  .progress-bar {
+    width: 100%;
+    height: 2px;
+    background: var(--line);
+    position: relative;
+    border-radius: 2px;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--spring-deep));
+    transition: width 0.5s ease;
+    border-radius: 2px;
+  }
+  
+  .progress-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--ink-faint);
+    margin-top: 10px;
+    letter-spacing: 2px;
+  }
+  
+  .question-num {
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+  }
+  
+  .question-text {
+    font-size: 18px;
+    line-height: 2;
+    color: var(--ink);
+    margin-bottom: 36px;
+    font-weight: 500;
+  }
+  
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  
+  .option {
+    padding: 18px 22px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--ink);
+    text-align: left;
+    font-family: inherit;
+    position: relative;
+    padding-left: 52px;
+  }
+  
+  .option-letter {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: var(--ink-faint);
+    background: var(--bg);
+    transition: all 0.25s ease;
+    flex-shrink: 0;
+  }
+  
+  .option:hover {
+    border-color: var(--accent);
+    background: #FDFCF9;
+    transform: translateX(4px);
+  }
+  
+  .option:hover .option-letter {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+  
+  /* 结果页 */
+  .result-page {
+    display: none;
+  }
+  
+  .result-page.active { display: block; animation: pageIn 0.6s ease; }
+  
+  /* MBTI风格结果头部 */
+  .result-hero {
+    text-align: center;
+    padding: 20px 0 32px;
+  }
+  
+  .result-label {
+    font-size: 13px;
+    letter-spacing: 6px;
+    color: var(--ink-faint);
+    margin-bottom: 20px;
+  }
+  
+  .result-you-are {
+    font-size: 16px;
+    color: var(--ink-light);
+    letter-spacing: 4px;
+    margin-bottom: 12px;
+  }
+  
+  .result-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    margin: 24px auto;
+    position: relative;
+    background: var(--bg-card);
+    border: 2px solid var(--line);
+  }
+  
+  .result-badge::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+  }
+  
+  .result-badge-name {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: 6px;
+  }
+  
+  .result-season-tag {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 4px;
+    padding: 4px 16px;
+    border-radius: 2px;
+    margin-top: 8px;
+  }
+  
+  .result-keywords {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 24px 0;
+  }
+  
+  .keyword {
+    font-size: 13px;
+    letter-spacing: 2px;
+    padding: 5px 16px;
+    border-radius: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+  }
+  
+  .result-poem {
+    font-size: 15px;
+    color: var(--ink-light);
+    letter-spacing: 2px;
+    line-height: 2.2;
+    margin-top: 20px;
+    font-style: italic;
+  }
+  
+  .result-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 40px 0;
+    color: var(--ink-faint);
+  }
+  
+  .result-divider::before,
+  .result-divider::after {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--line);
+  }
+  
+  /* 分析维度卡片 */
+  .result-section {
+    margin-bottom: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 24px;
+    transition: all 0.3s ease;
+  }
+  
+  .result-section:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  }
+  
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  
+  .section-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  
+  .section-title {
+    font-size: 14px;
+    letter-spacing: 3px;
+    font-weight: 600;
+  }
+  
+  .section-content {
+    font-size: 15px;
+    line-height: 2;
+    color: var(--ink);
+    text-indent: 2em;
+  }
+  
+  /* 箴言区 */
+  .result-motto {
+    text-align: center;
+    padding: 36px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    margin: 24px 0;
+  }
+  
+  .motto-label {
+    font-size: 12px;
+    letter-spacing: 6px;
+    color: var(--ink-faint);
+    margin-bottom: 16px;
+  }
+  
+  .motto-text {
+    font-size: 17px;
+    letter-spacing: 2px;
+    line-height: 2;
+    color: var(--ink);
+  }
+  
+  .result-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 48px;
+    flex-wrap: wrap;
+  }
+  
+  /* 四维量化分析 */
+  .dimension-analysis {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 28px 24px;
+    margin-bottom: 24px;
+  }
+  
+  .dim-section-title {
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+  }
+  
+  .dim-section-title::before {
+    content: '';
+    width: 12px;
+    height: 1px;
+    background: var(--accent);
+  }
+  
+  .dim-item {
+    margin-bottom: 18px;
+  }
+  
+  .dim-item:last-child { margin-bottom: 0; }
+  
+  .dim-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  
+  .dim-name {
+    font-size: 13px;
+    color: var(--ink);
+    letter-spacing: 1px;
+  }
+  
+  .dim-score {
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  
+  .dim-level {
+    font-size: 11px;
+    color: var(--ink-faint);
+    margin-left: 8px;
+  }
+  
+  .dim-bar {
+    height: 8px;
+    background: var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .dim-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+  }
+  
+  /* 节气图示 */
+  .term-illustration {
+    text-align: center;
+    margin: 24px 0;
+  }
+  
+  .term-illustration svg {
+    width: 120px;
+    height: 120px;
+  }
+  
+  /* 书签壁纸 Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .modal-overlay.active { display: flex; }
+  
+  .modal {
+    background: var(--bg);
+    border-radius: 12px;
+    max-width: 420px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 28px;
+  }
+  
+  .modal-title {
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+  }
+  
+  .modal-subtitle {
+    font-size: 12px;
+    color: var(--ink-faint);
+    text-align: center;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+  }
+  
+  .modal-preview {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  }
+  
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .modal-actions .btn {
+    flex: 1;
+    padding: 14px;
+    font-size: 14px;
+    letter-spacing: 2px;
+  }
+  
+  .modal-close {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--ink-faint);
+    cursor: pointer;
+    letter-spacing: 1px;
+  }
+  
+  .modal-close:hover { color: var(--accent); }
+  
+  /* 加载动画 */
+  .loading {
+    display: none;
+    text-align: center;
+    padding: 120px 0;
+  }
+  
+  .loading.active { display: block; }
+  
+  .loading-circle {
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--line);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+  }
+  
+  @keyframes spin { to { transform: rotate(360deg); } }
+  
+  .loading-text {
+    font-size: 14px;
+    color: var(--ink-light);
+    letter-spacing: 3px;
+    margin-top: 24px;
+  }
+  
+  /* 四季主题色 */
+  body.season-spring {
+    background-image: 
+      radial-gradient(circle at 20% 30%, rgba(168,195,160,0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(196,168,130,0.06) 0%, transparent 50%);
+  }
+  body.season-summer {
+    background-image: 
+      radial-gradient(circle at 20% 30%, rgba(212,165,165,0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(196,168,130,0.06) 0%, transparent 50%);
+  }
+  body.season-autumn {
+    background-image: 
+      radial-gradient(circle at 20% 30%, rgba(196,168,130,0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(181,163,181,0.06) 0%, transparent 50%);
+  }
+  body.season-winter {
+    background-image: 
+      radial-gradient(circle at 20% 30%, rgba(168,181,196,0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(176,176,176,0.06) 0%, transparent 50%);
+  }
+  
+  .season-spring .result-badge-name,
+  .season-spring .section-title,
+  .season-spring .motto-text { color: var(--spring-deep); }
+  .season-spring .result-badge { border-color: var(--spring); }
+  .season-spring .result-badge::before { border-color: var(--spring); }
+  .season-spring .result-season-tag { background: rgba(168,195,160,0.2); color: var(--spring-deep); }
+  .season-spring .section-icon { background: rgba(168,195,160,0.15); color: var(--spring-deep); }
+  .season-spring .keyword { border-color: var(--spring); color: var(--spring-deep); }
+  
+  .season-summer .result-badge-name,
+  .season-summer .section-title,
+  .season-summer .motto-text { color: var(--summer-deep); }
+  .season-summer .result-badge { border-color: var(--summer); }
+  .season-summer .result-badge::before { border-color: var(--summer); }
+  .season-summer .result-season-tag { background: rgba(212,165,165,0.2); color: var(--summer-deep); }
+  .season-summer .section-icon { background: rgba(212,165,165,0.15); color: var(--summer-deep); }
+  .season-summer .keyword { border-color: var(--summer); color: var(--summer-deep); }
+  
+  .season-autumn .result-badge-name,
+  .season-autumn .section-title,
+  .season-autumn .motto-text { color: var(--autumn-deep); }
+  .season-autumn .result-badge { border-color: var(--autumn); }
+  .season-autumn .result-badge::before { border-color: var(--autumn); }
+  .season-autumn .result-season-tag { background: rgba(196,168,130,0.2); color: var(--autumn-deep); }
+  .season-autumn .section-icon { background: rgba(196,168,130,0.15); color: var(--autumn-deep); }
+  .season-autumn .keyword { border-color: var(--autumn); color: var(--autumn-deep); }
+  
+  .season-winter .result-badge-name,
+  .season-winter .section-title,
+  .season-winter .motto-text { color: var(--winter-deep); }
+  .season-winter .result-badge { border-color: var(--winter); }
+  .season-winter .result-badge::before { border-color: var(--winter); }
+  .season-winter .result-season-tag { background: rgba(168,181,196,0.2); color: var(--winter-deep); }
+  .season-winter .section-icon { background: rgba(168,181,196,0.15); color: var(--winter-deep); }
+  .season-winter .keyword { border-color: var(--winter); color: var(--winter-deep); }
+  
+  /* 四季卡片与分析配色 */
+  .season-spring .result-section,
+  .season-spring .dimension-analysis,
+  .season-spring .result-motto { border-color: rgba(168,195,160,0.4); }
+  .season-spring .dim-section-title { color: var(--spring-deep); }
+  .season-spring .dim-section-title::before { background: var(--spring-deep); }
+  .season-spring .result-divider span { color: var(--spring-deep); }
+  
+  .season-summer .result-section,
+  .season-summer .dimension-analysis,
+  .season-summer .result-motto { border-color: rgba(212,165,165,0.4); }
+  .season-summer .dim-section-title { color: var(--summer-deep); }
+  .season-summer .dim-section-title::before { background: var(--summer-deep); }
+  .season-summer .result-divider span { color: var(--summer-deep); }
+  
+  .season-autumn .result-section,
+  .season-autumn .dimension-analysis,
+  .season-autumn .result-motto { border-color: rgba(196,168,130,0.4); }
+  .season-autumn .dim-section-title { color: var(--autumn-deep); }
+  .season-autumn .dim-section-title::before { background: var(--autumn-deep); }
+  .season-autumn .result-divider span { color: var(--autumn-deep); }
+  
+  .season-winter .result-section,
+  .season-winter .dimension-analysis,
+  .season-winter .result-motto { border-color: rgba(168,181,196,0.4); }
+  .season-winter .dim-section-title { color: var(--winter-deep); }
+  .season-winter .dim-section-title::before { background: var(--winter-deep); }
+  .season-winter .result-divider span { color: var(--winter-deep); }
+  
+  /* 结果页季节性装饰 */
+  .result-page.active { position: relative; }
+  .result-page.active::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.04;
+    background-repeat: no-repeat;
+    background-size: 300px;
+    background-position: right 20px top 100px;
+  }
+  .season-spring .result-page.active::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 10 C55 25 60 30 50 45 C40 30 45 25 50 10Z' fill='%237BA084'/%3E%3Cpath d='M50 45 L50 90' stroke='%237BA084' stroke-width='2'/%3E%3C/svg%3E"); }
+  .season-summer .result-page.active::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='20' fill='%23B07878'/%3E%3Cg stroke='%23B07878' stroke-width='3'%3E%3Cline x1='50' y1='10' x2='50' y2='22'/%3E%3Cline x1='50' y1='78' x2='50' y2='90'/%3E%3Cline x1='10' y1='50' x2='22' y2='50'/%3E%3Cline x1='78' y1='50' x2='90' y2='50'/%3E%3C/g%3E%3C/svg%3E"); }
+  .season-autumn .result-page.active::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 15 C65 30 65 45 50 55 C35 45 35 30 50 15Z' fill='%23A08454'/%3E%3Cpath d='M50 55 L50 90' stroke='%23A08454' stroke-width='2'/%3E%3C/svg%3E"); }
+  .season-winter .result-page.active::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg stroke='%237A94A8' stroke-width='2'%3E%3Cline x1='50' y1='15' x2='50' y2='85'/%3E%3Cline x1='20' y1='35' x2='80' y2='65'/%3E%3Cline x1='80' y1='35' x2='20' y2='65'/%3E%3C/g%3E%3C/svg%3E"); }
+  
+  @media (max-width: 600px) {
+    .container { padding: 24px 16px 60px; }
+    .start-page h1 { font-size: 34px; letter-spacing: 8px; }
+    .result-badge { width: 130px; height: 130px; }
+    .result-badge-name { font-size: 32px; }
+    .question-text { font-size: 16px; }
+    .option { font-size: 14px; padding: 16px 18px 16px 48px; }
+    .start-page .stats { gap: 24px; }
+    .season-icons { gap: 20px; }
+    .intro-circle { width: 260px; height: 260px; }
+    .intro-term { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 背景节气水印 -->
+<div class="bg-decor" id="bgDecor"></div>
+
+<!-- 开场动画 -->
+<div class="intro" id="intro">
+  <div class="intro-circle" id="introCircle"></div>
+  <div class="intro-center">
+    <div class="intro-title">节气人格</div>
+    <div class="intro-sub">万物有时 · 你亦有性</div>
+    <div class="intro-line"></div>
+  </div>
+  <div class="intro-hint">轻 触 屏 幕 开 始</div>
+</div>
+
+<div class="container">
+  
+  <!-- 开始页 -->
+  <div class="start-page" id="startPage" style="display:none;">
+    <!-- 顶部水墨山水装饰 -->
+    <svg class="start-ink-decor" viewBox="0 0 600 80" preserveAspectRatio="none">
+      <path d="M0 60 Q100 20 200 45 Q300 70 400 30 Q500 10 600 50 L600 80 L0 80 Z" fill="#A8C3A0" opacity="0.15"/>
+      <path d="M0 65 Q150 35 300 55 Q450 75 600 40 L600 80 L0 80 Z" fill="#7BA084" opacity="0.12"/>
+      <circle cx="480" cy="20" r="12" fill="#C4A882" opacity="0.2"/>
+    </svg>
+    
+    <div class="badge">廿 四 节 气 · 人 格 测 试</div>
+    
+    <!-- 四季轮回圆环 -->
+    <div class="start-season-ring">
+      <svg viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="90" fill="none" stroke="#E5DED3" stroke-width="1"/>
+        <circle cx="100" cy="100" r="75" fill="none" stroke="#E5DED3" stroke-width="1" stroke-dasharray="3 3"/>
+        <!-- 四季标记 -->
+        <text x="100" y="25" text-anchor="middle" fill="#7BA084" font-size="14" font-family="Noto Serif SC">春</text>
+        <text x="180" y="105" text-anchor="middle" fill="#B07878" font-size="14" font-family="Noto Serif SC">夏</text>
+        <text x="100" y="188" text-anchor="middle" fill="#A08454" font-size="14" font-family="Noto Serif SC">秋</text>
+        <text x="20" y="105" text-anchor="middle" fill="#7A94A8" font-size="14" font-family="Noto Serif SC">冬</text>
+        <!-- 24节气小点 -->
+        <g fill="#B5ADA2">
+          <circle cx="100" cy="15" r="2"/>
+          <circle cx="122" cy="19" r="1.5"/>
+          <circle cx="143" cy="28" r="1.5"/>
+          <circle cx="160" cy="42" r="1.5"/>
+          <circle cx="172" cy="60" r="1.5"/>
+          <circle cx="178" cy="80" r="1.5"/>
+          <circle cx="178" cy="120" r="1.5"/>
+          <circle cx="172" cy="140" r="1.5"/>
+          <circle cx="160" cy="158" r="1.5"/>
+          <circle cx="143" cy="172" r="1.5"/>
+          <circle cx="122" cy="181" r="1.5"/>
+          <circle cx="100" cy="185" r="2"/>
+          <circle cx="78" cy="181" r="1.5"/>
+          <circle cx="57" cy="172" r="1.5"/>
+          <circle cx="40" cy="158" r="1.5"/>
+          <circle cx="28" cy="140" r="1.5"/>
+          <circle cx="22" cy="120" r="1.5"/>
+          <circle cx="22" cy="80" r="1.5"/>
+          <circle cx="28" cy="60" r="1.5"/>
+          <circle cx="40" cy="42" r="1.5"/>
+          <circle cx="57" cy="28" r="1.5"/>
+          <circle cx="78" cy="19" r="1.5"/>
+        </g>
+      </svg>
+      <div class="start-ring-center">
+        <div class="char">节气</div>
+        <div class="char" style="font-size:14px; opacity:0.5;">人格</div>
+      </div>
+    </div>
+    
+    <div class="subtitle">万物有时，你亦有性</div>
+    
+    <div class="divider">
+      <span class="divider-icon">❖</span>
+    </div>
+    
+    <p class="desc">
+      二十四节气，是中国人的时间智慧。<br>
+      每个节气，都有自己的性格与节奏。<br>
+      答完这三十道题，看看你是哪一个节气——<br>
+      是春的萌动，夏的热烈，<br>
+      还是秋的沉静，冬的深藏。
+    </p>
+    
+    <div class="season-icons">
+      <div class="season-icon spring" title="春">🌱</div>
+      <div class="season-icon summer" title="夏">☀</div>
+      <div class="season-icon autumn" title="秋">🍂</div>
+      <div class="season-icon winter" title="冬">❄</div>
+    </div>
+    
+    <div class="stats">
+      <div class="stat-item">
+        <div class="stat-num">30</div>
+        <div class="stat-label">道 题</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">24</div>
+        <div class="stat-label">种 人 格</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">5</div>
+        <div class="stat-label">分 钟</div>
+      </div>
+    </div>
+    
+    <button class="btn" onclick="startQuiz()">开 始 测 试</button>
+  </div>
+  
+  <!-- 答题页 -->
+  <div class="quiz-page" id="quizPage">
+    <div class="progress">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      </div>
+      <div class="progress-text">
+        <span id="currentNum">1</span>
+        <span>/ 30</span>
+      </div>
+    </div>
+    <div class="question-num" id="questionNum">第 一 题</div>
+    <div class="question-text" id="questionText"></div>
+    <div class="options" id="optionsContainer"></div>
+  </div>
+  
+  <!-- 加载页 -->
+  <div class="loading" id="loadingPage">
+    <div class="loading-circle"></div>
+    <div class="loading-text">正在解析你的节气人格...</div>
+  </div>
+  
+  <!-- 结果页 -->
+  <div class="result-page" id="resultPage">
+    <div class="result-hero">
+      <div class="result-label" id="resultSeasonLabel"></div>
+      <div class="result-you-are">你 是</div>
+      <div class="result-badge">
+        <div class="result-badge-name" id="resultName"></div>
+      </div>
+      <div class="result-season-tag" id="resultSeasonTag"></div>
+      <div class="result-keywords" id="resultKeywords"></div>
+      <div class="result-poem" id="resultPoem"></div>
+    </div>
+    
+    <!-- 节气图示 -->
+    <div class="term-illustration" id="termIllustration"></div>
+    
+    <!-- 四维量化分析 -->
+    <div class="dimension-analysis">
+      <div class="dim-section-title">四 维 倾 向 分 析</div>
+      <div id="dimensionsContainer"></div>
+    </div>
+    
+    <div class="result-divider"><span>✦</span></div>
+    
+    <div class="result-section">
+      <div class="section-header">
+        <div class="section-icon">✦</div>
+        <div class="section-title">性 格 画 像</div>
+      </div>
+      <div class="section-content" id="portrait"></div>
+    </div>
+    
+    <div class="result-section">
+      <div class="section-header">
+        <div class="section-icon">❋</div>
+        <div class="section-title">你 的 能 量 之 源</div>
+      </div>
+      <div class="section-content" id="energy"></div>
+    </div>
+    
+    <div class="result-section">
+      <div class="section-header">
+        <div class="section-icon">❀</div>
+        <div class="section-title">你 的 情 感 底 色</div>
+      </div>
+      <div class="section-content" id="emotion"></div>
+    </div>
+    
+    <div class="result-section">
+      <div class="section-header">
+        <div class="section-icon">❖</div>
+        <div class="section-title">你 的 处 世 之 道</div>
+      </div>
+      <div class="section-content" id="philosophy"></div>
+    </div>
+    
+    <div class="result-section">
+      <div class="section-header">
+        <div class="section-icon">✧</div>
+        <div class="section-title">天 赋 所 长</div>
+      </div>
+      <div class="section-content" id="talent"></div>
+    </div>
+    
+    <div class="result-section">
+      <div class="section-header">
+        <div class="section-icon">◈</div>
+        <div class="section-title">成 长 之 课</div>
+      </div>
+      <div class="section-content" id="growth"></div>
+    </div>
+    
+    <div class="result-motto">
+      <div class="motto-label">节 气 箴 言</div>
+      <div class="motto-text" id="motto"></div>
+    </div>
+    
+    <div class="result-actions">
+      <button class="btn btn-outline" onclick="openBookmarkModal()">生 成 书 签 壁 纸</button>
+      <button class="btn btn-outline" onclick="restart()">再 测 一 次</button>
+      <button class="btn" onclick="shareResult()">分 享 给 朋 友</button>
+    </div>
+  </div>
+  
+</div>
+
+<!-- 书签壁纸 Modal -->
+<div class="modal-overlay" id="bookmarkModal">
+  <div class="modal">
+    <div class="modal-title">你的节气书签</div>
+    <div class="modal-subtitle">长按或点击保存，即可设为壁纸</div>
+    <img class="modal-preview" id="bookmarkPreview" alt="节气书签">
+    <div class="modal-actions">
+      <button class="btn" onclick="saveBookmark()">保 存 到 本 地</button>
+    </div>
+    <div class="modal-close" onclick="closeBookmarkModal()">关 闭</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ============================================================
+// Supabase 数据存储配置（部署前必填，两处）
+// ① supabase.com → 你的项目 → Settings → API
+//    复制 Project URL 填到 SUPABASE_URL
+//    复制 anon public key 填到 SUPABASE_ANON_KEY
+// ② 在 SQL Editor 执行同目录的 supabase_setup.sql 建表
+// 填好并建表后，用户每测完一次，结果会自动写入数据库。
+// ============================================================
+const SUPABASE_URL = 'https://zszjpidubqvcnrwivwtw.supabase.co'; // ← 改成你的 Project URL
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpzempwaWR1YnF2Y25yd2l2d3R3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI5MzY2MTMsImV4cCI6MjEwODUxMjYxM30.VylNBOae2_Khwz3IVIoH6XI3VHasKigP4zsRosEQrRI';           // ← 改成你的 anon public key
+const SUPABASE_ENABLED = !SUPABASE_URL.includes('YOUR-PROJECT-REF');
+
+let _sb = null;
+function getSupabaseClient() {
+  if (!SUPABASE_ENABLED || typeof supabase === 'undefined') return null;
+  if (!_sb) {
+    try {
+      _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } catch (e) {
+      console.warn('[Supabase] 初始化失败：', e.message);
+      return null;
+    }
+  }
+  return _sb;
+}
+
+// 上报一次测试结果（节气名 + 浏览器标识），异步且失败静默，绝不影响页面
+async function reportResultToSupabase(termName) {
+  const client = getSupabaseClient();
+  if (!client) return;
+  try {
+    const { error } = await client.from('test_results').insert({
+      solar_term: termName,
+      user_agent: (navigator.userAgent || '').slice(0, 255)
+    });
+    if (error) console.warn('[Supabase] 写入失败：', error.message);
+  } catch (e) {
+    console.warn('[Supabase] 上报异常（已忽略）：', e.message);
+  }
+}
+
+// 二十四节气名称（用于开场动画和背景装饰）
+const allTerms = ['立春','雨水','惊蛰','春分','清明','谷雨','立夏','小满','芒种','夏至','小暑','大暑','立秋','处暑','白露','秋分','寒露','霜降','立冬','小雪','大雪','冬至','小寒','大寒'];
+
+// 生成背景装饰
+const bgDecor = document.getElementById('bgDecor');
+allTerms.forEach((term, i) => {
+  const el = document.createElement('div');
+  el.className = 'bg-term';
+  el.textContent = term;
+  el.style.left = (Math.random() * 90) + '%';
+  el.style.top = (Math.random() * 90) + '%';
+  el.style.transform = `rotate(${(Math.random() - 0.5) * 30}deg)`;
+  bgDecor.appendChild(el);
+});
+
+// 开场动画 - 节气围绕圆形排列
+const introCircle = document.getElementById('introCircle');
+allTerms.forEach((term, i) => {
+  const angle = (i / 24) * Math.PI * 2 - Math.PI / 2;
+  const radius = 140;
+  const x = Math.cos(angle) * radius;
+  const y = Math.sin(angle) * radius;
+  const el = document.createElement('div');
+  el.className = 'intro-term';
+  el.textContent = term;
+  el.style.left = `calc(50% + ${x}px)`;
+  el.style.top = `calc(50% + ${y}px)`;
+  el.style.transform = 'translate(-50%, -50%)';
+  el.style.animationDelay = (i * 0.08) + 's';
+  introCircle.appendChild(el);
+});
+
+// 点击开场动画进入
+const intro = document.getElementById('intro');
+intro.addEventListener('click', () => {
+  intro.classList.add('fade-out');
+  document.getElementById('startPage').style.display = 'block';
+  setTimeout(() => { intro.style.display = 'none'; }, 800);
+});
+
+// 题目数据
+const questions = [
+  {dim:'A', reverse:false, q:'推开一扇门，里面是一个你完全陌生的聚会。你的目光首先被什么吸引？', opts:['人群中正在大笑的那个人','角落里安静看书的人','桌上的食物和装饰','窗外的景色']},
+  {dim:'A', reverse:false, q:'如果你的内心是一个房间，它更像？', opts:['一个挤满朋友的客厅，热闹喧嚷','一个只有一盏灯的书房，安静专注','一个有咖啡香的咖啡馆，人来人往但互不打扰','一个有落地窗的阳台，面向远方']},
+  {dim:'A', reverse:false, q:'一场聚会结束，你走在回家路上。你心里的感觉更像？', opts:['充了电，还想再聊一会儿','有点累，但很开心','电量耗尽，急需独处回血','看今晚和谁在一起']},
+  {dim:'A', reverse:false, q:'想象你站在一片旷野中央，四周没有任何人。你的第一反应是？', opts:['太好了，终于可以大喊一声','有点孤单，但很快享受这份宁静','开始往有光的方向走','不确定，先观察一下']},
+  {dim:'A', reverse:false, q:'你的开心事，通常以什么方式"跑出去"？', opts:['像烟花，瞬间炸开给所有人看','像信鸽，只飞到最亲的人那里','像朋友圈，发出去但不期待回应','像窖藏的酒，自己偷偷品']},
+  {dim:'A', reverse:false, q:'如果用一种光来形容你在人群中的存在感，你是？', opts:['聚光灯，所有人都能看到','台灯，只照亮身边几个人','走廊灯，有人经过就亮一下','月光，安静地在但不打扰']},
+  {dim:'A', reverse:false, q:'朋友临时喊你出门，你心里冒出来的第一个画面是？', opts:['已经穿好鞋站在门口了','在犹豫要不要去','在找借口推掉','在想"又是谁"']},
+  {dim:'A', reverse:true, q:'别人第一次见你，最可能用哪个词形容你？', opts:['自来熟','有点慢热','挺安静的','好像不太好接近']},
+  {dim:'B', reverse:false, q:'深秋，你看到一片叶子从树上落下。你脑中浮现的第一个念头是？', opts:['它落得好孤单啊','这是自然规律，明年还会长','这片叶子的颜色真好看','它落下来需要几秒？']},
+  {dim:'B', reverse:false, q:'朋友深夜发来消息说"我好难过"。你的第一反应像？', opts:['一杯热茶，想立刻暖到TA心里','一张地图，帮TA找到出口','一面镜子，跟TA说我也经历过','一把伞，帮TA挡住这场雨']},
+  {dim:'B', reverse:false, q:'如果你的大脑是一个房间，里面摆得最多的是？', opts:['照片，全是回忆和情绪','书架，全是逻辑和知识','画板，全是画面和美感','白板，全是分析和推演']},
+  {dim:'B', reverse:false, q:'看一部电影到结尾，你最可能因为什么哭？', opts:['角色的情感太戳心','剧情反转太意外','画面和音乐太美','某个观点太深刻']},
+  {dim:'B', reverse:false, q:'面对一个选择，你心里最先响起的声音是？', opts:['"我感觉应该这样"','"让我想想利弊"','"别人会怎么看"','"数据怎么说"']},
+  {dim:'B', reverse:false, q:'走进一家书店，你最先拿起的书是？', opts:['一本让你心动的小说','一本讲方法论的工具书','一本摄影或画集','一本讲哲学思考的书']},
+  {dim:'B', reverse:false, q:'如果用一种天气形容你处理情绪的方式，你是？', opts:['雷阵雨，来了就下，下完就晴','阴天，闷闷的但不爆发','毛毛雨，细细长长不声不响','晴天，基本不怎么下雨']},
+  {dim:'B', reverse:true, q:'别人说你"太感情用事"，你的第一反应是？', opts:['好像确实是这样','有时候吧','我还好吧','完全不是，我很理性的']},
+  {dim:'C', reverse:false, q:'如果你的脚步是一种声音，它更像？', opts:['急促的鼓点','均匀的钟摆','慢慢的脚步','没有固定节奏']},
+  {dim:'C', reverse:false, q:'老师/老板丢给你一个任务，你脑子里第一个画面是？', opts:['已经在做了，手比脑子快','先在脑子里搭个框架','deadline前几天再说','先放着，让它"发酵"一下']},
+  {dim:'C', reverse:false, q:'如果你的生活是一首曲子，它的节拍是？', opts:['快板，停不下来','行板，不紧不慢','柔板，悠悠的','散板，随心所欲']},
+  {dim:'C', reverse:false, q:'面前有一杯刚泡好的茶，你会？', opts:['吹两下就喝','等它稍微凉一点','放着，想起来再喝','一定要等到最适合的温度']},
+  {dim:'C', reverse:false, q:'你的一天更像哪种交通方式？', opts:['高铁，一站到底中间不停','地铁，每站都停但准点','公交，晃晃悠悠','步行，想走就走想停就停']},
+  {dim:'C', reverse:false, q:'突然发生一件意料之外的事，你的反应像？', opts:['弹簧，立刻弹起来应对','猫，先观察再动','树，晃两下但站稳','水，顺着流慢慢适应']},
+  {dim:'C', reverse:true, q:'朋友说你"做事风风火火"，你觉得？', opts:['说得太对了','有点像','不太像','我明明很稳好吗']},
+  {dim:'D', reverse:false, q:'你来到一个岔路口，左边是你走过无数次的路，右边是你从未走过的新路。你会？', opts:['毫不犹豫走右边','犹豫一下还是走右边','走左边，但会探头看看右边','必须走左边，新路太没底了']},
+  {dim:'D', reverse:false, q:'如果你的内心是一座房子，它多久翻新一次？', opts:['每隔一段时间就想重新装修','偶尔换个家具','基本不动，保持原样','从来不变，越旧越有味道']},
+  {dim:'D', reverse:false, q:'你面前有一杯水，旁边有一杯没见过的彩色饮料。你会？', opts:['立刻尝那杯彩色的','先问是什么再决定','还是喝水吧','两个都想试试但最后选了水']},
+  {dim:'D', reverse:false, q:'你对"未知"的感觉，更像？', opts:['一个拆礼物的盒子，期待','一扇半开的门，好奇','一团雾，有点不安','一堵墙，不想靠近']},
+  {dim:'D', reverse:false, q:'你每年的生日愿望，更接近？', opts:['希望今年能尝试很多新东西','希望能有一些小变化','希望一切顺利不要有变故','希望保持现在的状态就好']},
+  {dim:'D', reverse:false, q:'你手机里的App，更接近哪种状态？', opts:['经常下载新的，旧的也留着','偶尔试试新的，不好用就删','基本就那几个，很少变','从来不下新的，够用就行']},
+  {dim:'D', reverse:true, q:'别人说你"喜欢新鲜事物"，你觉得？', opts:['太准了','差不多吧','不太像','我很念旧的好不好']}
+];
+
+const chNum = ['一','二','三','四','五','六','七','八','九','十','十一','十二','十三','十四','十五','十六','十七','十八','十九','二十','廿一','廿二','廿三','廿四','廿五','廿六','廿七','廿八','廿九','三十'];
+const letters = ['A','B','C','D'];
+
+// 24节气人格数据（精简版，完整数据见方案文档）
+const solarTerms = {
+  spring: [
+    {name:'立春',date:'2月3-5日',season:'春',keywords:['新生','希望','开拓者'],poem:'律回岁晚冰霜少，春到人间草木知。',portrait:'你是立春——二十四节气之首，万物复苏的起点。寒意尚未褪尽，但你的骨子里已经藏不住向上的生机。你像冻土下初萌的草芽，旁人还在观望，你早已嗅到春的气息。你是天生的"开局之人"，相信一切都可以重新开始，这种信念本身就是一种力量。',energy:'你的能量来自"可能性"。面对一张白纸、一个新项目、一段新关系，你会本能地兴奋。你不是在做事，你是在"展开"——把无数个"如果"变成"正在发生"。当生活陷入重复，你会第一个感到窒息。',emotion:'你是暖色调的人。不是盛夏的灼热，而是冰雪初融时那一缕阳光——不强烈，但让人愿意相信。你很少真正绝望，因为你总觉得"下一个春天就快来了"。',philosophy:'你信奉"先动起来再说"。在别人还在权衡利弊时，你已经迈出了第一步。你不害怕犯错，因为在你看来，不动才是最大的错。你是那种把"试错"活成"探索"的人。',talent:'极强的启动能力与感染力。你能把一群犹豫不决的人带动起来，让死水微澜。团队里有你在，就永远不会缺乏"试试看"的勇气。',growth:'你擅长开局，却未必擅长守局。春雷一响万物生，但并非每颗种子都能等到秋收。你的课题是——学会把热情熬成坚持，让开头的轰轰烈烈，变成结尾的扎扎实实。',motto:'一年之计在于春。愿你既有破土的勇气，也有守候的耐心。'},
+    {name:'雨水',date:'2月18-20日',season:'春',keywords:['温润','滋养','治愈者'],poem:'好雨知时节，当春乃发生。随风潜入夜，润物细无声。',portrait:'你是雨水——春夜那场不声不响的雨。你不像立春那样锋芒毕露，却有一种渗进骨血的温柔。旁人或许一时察觉不到你的存在，但回头望去，才发现干涸的心早已被你悄悄浸润。你是朋友圈里的"隐形守护者"。',energy:'你的能量来自"连接"。你天生能感知他人情绪的阴晴，像雨丝一样敏锐地捕捉到每一丝细微的波动。当身边人需要时，你会不自觉地靠过去，用最轻柔的方式给出支撑。',emotion:'你是水做的。柔软、包容、善于共情，但也正因为如此，你很容易把别人的情绪接过来，变成自己的负担。你心疼所有人，却常常忘了心疼自己。',philosophy:'你信奉"润物无声"。你不喜欢大张旗鼓地表达善意，更愿意用行动默默付出。你相信真正的好，是让对方在不知不觉中被治愈。',talent:'极强的共情力与治愈力。你是天生的倾听者，朋友愿意把最深的心事说给你听，因为你懂得"接住"，而不是"评判"。',growth:'雨水滋养万物，却也容易让自己泛滥。你的课题是——学会给温柔设一个边界。对别人好是你的本能，但别忘了，你自己也是需要被滋养的那一片田。',motto:'上善若水。愿你润得了万物，也守得住自己。'},
+    {name:'惊蛰',date:'3月5-7日',season:'春',keywords:['觉醒','突破','行动派'],poem:'微雨众卉新，一雷惊蛰始。',portrait:'你是惊蛰——一声春雷惊醒了蛰伏的万物。你平日里看起来平平淡淡，甚至有些佛系，但你的骨子里藏着一股"被点燃就爆发"的力量。你不是不行动，你只是在等那个属于你的"春雷"。一旦时机到了，你会让所有人大吃一惊。',energy:'你的能量来自"触发"。你需要一个契机、一个刺激、一个让你"非做不可"的理由。在此之前，你可以安静地蛰伏很久，像冬眠的兽，积蓄着不为人知的力量。',emotion:'你是"慢热但滚烫"的人。平时你不轻易表露情绪，但一旦被触及内心，你的反应会比任何人都强烈。你的爱与恨都藏得很深，但绝不浅薄。',philosophy:'你信奉"不鸣则已，一鸣惊人"。你不喜欢无意义的忙碌，更愿意在关键时刻集中发力。你相信厚积薄发，所以你允许自己"慢"，但你心里清楚，自己从来不是"弱"。',talent:'惊人的爆发力与潜力。你在关键时刻总能挺身而出，爆发出远超平日的能量。你是那种"平时不显山不露水，一出手就惊艳全场"的人。',growth:'蛰伏太久，容易变成拖延。你的课题是——主动为自己创造"春雷"。不要总等外力来唤醒你，学会自己点燃自己，让蛰伏变成主动的准备，而不是被动的等待。',motto:'春雷一响，万物生长。愿你等得到时机，也等得起自己。'},
+    {name:'春分',date:'3月20-22日',season:'春',keywords:['平衡','公正','协调者'],poem:'仲春初四日，春色正中分。',portrait:'你是春分——昼夜均分，阴阳相半。你是天生的"平衡者"，站在黑白之间、冷暖之间、对错之间，你总能找到那个刚刚好的点。你不极端、不偏颇，像一杆秤，让身边的一切都归于秩序与和谐。',energy:'你的能量来自"和谐"。当周遭陷入混乱与对立，你会本能地想要调停。你无法忍受极端，因为你骨子里相信，万物各有其位，各得其所才是最好的状态。',emotion:'你是温和的、圆融的。你很少与人正面冲突，因为你总能看到双方的立场。你不是没有立场，而是你更愿意"求同存异"，在差异中找到共识。',philosophy:'你信奉"中庸之道"。你不走极端，不做绝事，留三分余地给别人，也留三分余地给自己。你相信凡事过犹不及，恰到好处才是长久之计。',talent:'极强的协调力与公正心。你是天生的调停者，有你在的地方，矛盾总能被化解，纷争总能被平息。你能让对立的双方坐下来，因为你让他们看到彼此的合理。',growth:'追求平衡的人，最怕的是"和稀泥"。你的课题是——在平衡之外，也要有立场。不是所有事都能"两边都不得罪"，有时候，你需要站出来，哪怕打破平衡，也要守住原则。',motto:'阴阳相半，昼夜均平。愿你守得住平衡，也守得住原则。'},
+    {name:'清明',date:'4月4-6日',season:'春',keywords:['清朗','通透','洞察者'],poem:'清明时节雨纷纷，路上行人欲断魂。',portrait:'你是清明——天清地明，万物显化。你有一双"透视眼"，能拨开迷雾看到本质。你清醒、通透，不被表象迷惑，也不被情绪裹挟。旁人看山是山，你看山是山的来处与去处。但也正因如此，你有时会显得"太清醒"，让人觉得难以亲近。',energy:'你的能量来自"真相"。你对虚假有本能的排斥，对本质有执着的追求。你无法忍受"糊弄"，因为你心里清楚，纸终究包不住火，不如一开始就看个明白。',emotion:'你是清冷的、疏离的。不是冷漠，而是你看得太透，所以很难被表象打动。你的感动往往来自深层的共鸣，而非表面的热闹。你不是没有温度，只是你的温度藏得很深。',philosophy:'你信奉"实事求是"。你不喜欢粉饰太平，也不喜欢自欺欺人。你宁愿听真话而痛，也不愿听假话而安。你是那种"众人皆醉我独醒"的人，虽然有时会觉得孤独。',talent:'极强的洞察力与判断力。你能一眼看穿事物的本质，在别人还在纠结表象时，你已经找到了症结。你是天生的"谋士"，适合做分析、决策、看穿人心的工作。',growth:'水至清则无鱼，人至察则无徒。你的课题是——偶尔糊涂。不是所有事都要看透，不是所有人都要拆穿。留一点朦胧，留一点余地，你会发现，糊涂也是一种智慧。',motto:'天清地明，万物显化。愿你看得透世情，也容得下糊涂。'},
+    {name:'谷雨',date:'4月19-21日',season:'春',keywords:['丰饶','沉淀','耕耘者'],poem:'谷雨春光晓，山川黛色青。',portrait:'你是谷雨——雨生百谷，春之压轴。你带着春天最后的丰饶与沉淀，是务实、勤恳、脚踏实地的代名词。你相信一分耕耘一分收获，不相信天上掉馅饼。你是团队里最可靠的存在，把事交给你，就等于放进了保险柜。',energy:'你的能量来自"收获"。你享受"种瓜得瓜、种豆得豆"的确定感。你愿意付出，因为你相信付出必有回响。你不是在工作，你是在"耕耘"——播下种子，然后耐心等待秋天。',emotion:'你是踏实的、温暖的。你不擅长浪漫的表达，但你的爱意藏在日复一日的行动里。你不会说"我爱你"，但你会把饭做好、把家收拾好、把对方的事当成自己的事。',philosophy:'你信奉"天道酬勤"。你不投机取巧，不好高骛远，你相信路是一步步走出来的，事是一件件做成的。你是那种"但行好事，莫问前程"的人，因为你知道，前程就在脚下。',talent:'极强的耐力与可靠性。你能把一件枯燥的事坚持到底，能在别人放弃的时候继续往前走。你是团队的"压舱石"，有你在，再大的风浪也不会翻船。',growth:'太务实的人，容易错过星空。你的课题是——抬起头看看远方。除了脚下的路，也要偶尔抬头看看天上的云。生活不只有耕耘，也有风花雪月；不只有收获，也有值得驻足的风景。',motto:'雨生百谷，万物可期。愿你耕得好田，也看得见月。'}
+  ],
+  summer: [
+    {name:'立夏',date:'5月5-7日',season:'夏',keywords:['热烈','绽放','表现者'],poem:'绿树阴浓夏日长，楼台倒影入池塘。',portrait:'你是立夏——夏之初始，热情初绽。你像初夏的阳光，温暖而不灼人，明亮而不刺眼。你热爱生活、喜欢表现，走到哪里都自带光芒。你是那种"人还没到，笑声先到"的人，有你在的地方，气氛永远不会冷。',energy:'你的能量来自"表达"。你需要被看见、被回应、被认可。你像夏天的花，开得热烈、开得张扬，因为你天生就属于阳光之下。你不是在炫耀，你只是在"绽放"——这是你的本能。',emotion:'你是热烈的、外放的。你开心就笑，难过就哭，不喜欢藏着掖着。你的情绪像夏天的天气，来得快去得也快，但每一次都全力以赴。你爱得坦荡，恨得分明。',philosophy:'你信奉"活在当下"。你不喜欢纠结过去，也不喜欢焦虑未来，你更愿意把每一个"现在"过好。你是那种"今朝有酒今朝醉"的人，因为你相信，当下的快乐才是真实的。',talent:'极强的感染力与表现力。你能让身边的人都开心起来，能把沉闷的气氛变得活跃。你是天生的"气氛组"，也是天生的"舞台中心"。',growth:'太阳太亮，会灼伤身边的人。你的课题是——学会收敛光芒。不是所有人都像你一样热爱聚光灯，有些人更需要安静的角落。给别人留一点阴影，你的光芒会更温暖。',motto:'夏木已成阴，芳菲未肯歇。愿你绽放得热烈，也温柔得不伤人。'},
+    {name:'小满',date:'5月20-22日',season:'夏',keywords:['知足','从容','享受者'],poem:'小满胜万全，人生最相宜。',portrait:'你是小满——麦粒渐满，未满将满。你深谙"月满则亏，水满则溢"的道理，所以你从不追求极致。你懂得"刚刚好"的智慧，懂得在"将满未满"时享受过程。你是朋友圈里最会生活的人，因为你总能在平凡里找到满足。',energy:'你的能量来自"知足"。你不需要太多，就觉得很幸福。一杯好茶、一本好书、一个阳光明媚的下午，就能让你心满意足。你不与别人比较，因为你有自己的节奏。',emotion:'你是平和的、从容的。你很少焦虑，因为你不贪心。你相信"有舍才有得"，所以你愿意放下那些强求不来的东西，转身去拥抱已经拥有的美好。',philosophy:'你信奉"知足常乐"。你不追求最好，只追求最适合。你不羡慕别人拥有的，因为你知道，别人也在羡慕你拥有的。你是那种"一箪食，一瓢饮，不改其乐"的人。',talent:'极强的幸福感与满足感。你能在任何环境里找到快乐，能把平淡的日子过出滋味。你是天生的"生活家"，你的存在本身就证明了——幸福不需要太多条件。',growth:'知足是好事，但知足也可能变成"躺平"的借口。你的课题是——在知足之外，也要有"更进一步"的勇气。小满很好，但人生偶尔也需要"大满"一次，哪怕只是为了看看山顶的风景。',motto:'小满即圆满。愿你知足，也不停止生长。'},
+    {name:'芒种',date:'6月5-7日',season:'夏',keywords:['忙碌','充实','实干家'],poem:'芒种忙忙割，农家乐启镰。',portrait:'你是芒种——有芒之谷可种，是夏天最忙碌的节气。你永远在做事，永远在路上，你的日程表排得满满当当，你的脑子转得飞快。你踏实、勤奋，把日子过得充实而有意义。你是那种"停不下来"的人，一闲下来反而浑身不自在。',energy:'你的能量来自"完成"。你享受把一件事从"待办"划到"已完成"的快感。你像芒种时节的农夫，手里的活永远做不完，但每做完一件，心里就踏实一分。你不是在忙碌，你是在"收割"——收割一份份成就感。',emotion:'你是务实的、有责任感的。你不擅长说甜言蜜语，但你的爱体现在"我帮你把这事办了"。你用行动表达关心，用结果证明承诺。你是那种"话不多，但事办得漂亮"的人。',philosophy:'你信奉"天道酬勤"。你相信没有白流的汗，没有白走的路。你不喜欢偷懒，也不喜欢耍小聪明，你更愿意用笨功夫、苦功夫把事做到位。你相信，时间会奖励勤奋的人。',talent:'极强的执行力与多线程处理能力。你能同时推进好几件事，还能把每件事都做得井井有条。你是团队里的"永动机"，有你在，再大的工作量也能啃下来。',growth:'芒种太忙，容易错过了夏天的风。你的课题是——学会停下来。不是所有事都需要立刻做完，不是所有时间都必须填满。偶尔偷个懒，发个呆，你会发现，生活不只有"完成清单"，还有"此刻正在发生的美好"。',motto:'芒种忙种，忙而不茫。愿你耕得勤，也歇得下。'},
+    {name:'夏至',date:'6月21-22日',season:'夏',keywords:['极致','鼎盛','焦点人物'],poem:'日长之至，日影短至，故曰夏至。',portrait:'你是夏至——一年中白昼最长的一天，盛夏的巅峰。你是夏天的C位，热烈、耀眼、存在感极强。你追求极致，要么不做，要做就做到最好。你是那种"宁可轰轰烈烈活一天，也不愿平平淡淡过一年"的人。',energy:'你的能量来自"极致"。你无法忍受"差不多"，你要的是"最好"。你像夏至的太阳，把所有的光和热都释放出来，不留余地。你不是在努力，你是在"燃烧"——用尽全力，直到化为灰烬。',emotion:'你是浓烈的、极致的。你爱就爱得死去活来，恨就恨得彻彻底底。你没有中间地带，没有"差不多"，你的世界只有黑与白、是与非、爱与恨。你活得痛快，也活得累。',philosophy:'你信奉"全力以赴"。你不喜欢留后手，不喜欢给自己留退路。你相信"置之死地而后生"，所以你总是把自己逼到极限，然后在极限中爆发出惊人的力量。你是那种"不疯魔不成活"的人。',talent:'极强的能量与追求卓越的精神。你能把一件事做到极致，能在别人觉得"已经够好了"的时候，再向前一步。你是天生的"顶尖选手"，你的存在会拉高整个团队的天花板。',growth:'日中则昃，月盈则亏。你的课题是——学会收敛。极致是好的，但极致也意味着无法持久。你不可能永远在巅峰，你需要学会接受"下坡"，接受"不完美"，接受"我已经够好了"。',motto:'日长之至，日影短至。愿你燃得热烈，也收得从容。'},
+    {name:'小暑',date:'7月6-8日',season:'夏',keywords:['温暖','渐进','慢性子'],poem:'倏忽温风至，因循小暑来。',portrait:'你是小暑——暑气渐盛，未到极致。你不像大暑那样炽烈，而是像小火慢炖，慢慢升温。你慢热、持久、后劲十足，是"路遥知马力，日久见人心"的类型。你不会一开始就惊艳所有人，但时间越久，你越让人离不开。',energy:'你的能量来自"持久"。你不追求爆发力，你追求的是"一直在线"。你像小暑的风，不灼热，但持续不断。你相信"细水长流"，所以你愿意慢慢来，因为你知道，快不一定赢，稳才是王道。',emotion:'你是温润的、绵长的。你不会一见钟情，但一旦认定，就会很久很久。你的爱不是轰轰烈烈的烟花，而是细水长流的溪流——不张扬，但永不干涸。你是那种"越相处越觉得好"的人。',philosophy:'你信奉"厚积薄发"。你不急于求成，更愿意一步一个脚印。你相信时间的力量，相信只要方向对，慢一点也没关系。你是那种"大器晚成"的人，你的光芒需要时间来打磨。',talent:'极强的耐力与持久力。你能在别人放弃的时候继续坚持，能在看不到希望的时候继续往前走。你是天生的"长跑选手"，你的优势不在起点，而在终点。',growth:'慢热是好的，但太慢可能会错过。你的课题是——偶尔加速。不是所有事都可以慢慢来，有些机会稍纵即逝，有些人错过了就是一辈子。该快的时候，也要有"冲一把"的勇气。',motto:'暑气渐盛，来日方长。愿你走得稳，也追得上风。'},
+    {name:'大暑',date:'7月22-24日',season:'夏',keywords:['炽烈','浓烈','燃烧者'],poem:'赤日几时过，清风无处寻。',portrait:'你是大暑——盛夏之巅，炽热至极。你是夏天的终极形态，热烈、浓烈、毫无保留。你像正午的太阳，把所有的光和热都倾倒下来，不遮不掩。你爱就爱得轰轰烈烈，做就做得淋漓尽致。你是那种"不疯魔不成活"的人，你的人生字典里没有"将就"二字。',energy:'你的能量来自"燃烧"。你天生就带着一股"燃"劲，要么不做，要做就做到极致。你无法忍受平庸，无法忍受"差不多"。你像大暑的骄阳，要么把人晒得发烫，要么把人晒得融化——你永远不会"温吞"。',emotion:'你是炽烈的、滚烫的。你的爱像火焰，能温暖人，也能灼伤人。你不会"浅尝辄止"，你要的是"全部"。你的情绪也像夏天的雷阵雨，来得猛烈，来得突然，但每一滴都是真心实意。',philosophy:'你信奉"竭尽全力"。你不喜欢留余地，不喜欢给自己留退路。你相信"背水一战"才能激发最大的潜力。你是那种"把自己逼到绝境，然后绝境逢生"的人，你的人生就是一次次的"置之死地而后生"。',talent:'极强的爆发力与感染力。你能在短时间内爆发出惊人的能量，能把身边的人都点燃。你是天生的"领袖"，你的热情会让所有人都愿意跟着你往前冲。',growth:'火太旺，会把自己也烧尽。你的课题是——学会降温。不是所有事都需要全力以赴，不是所有人都值得你燃烧自己。留一点力气，留一点余地，你会发现，持久的温暖比短暂的炽烈更动人。',motto:'赤日几时过，清风无处寻。愿你燃得尽兴，也留得住余温。'}
+  ],
+  autumn: [
+    {name:'立秋',date:'8月7-9日',season:'秋',keywords:['转折','内敛','过渡者'],poem:'云天收夏色，木叶动秋声。',portrait:'你是立秋——夏去秋来，转折之始。你是天生的"过渡者"，擅长在变化中找到平衡，在混乱中找到秩序。你不激进、不退缩，而是稳稳地接住每一个转折。你是那种"任尔东西南北风，我自岿然不动"的人，因为你心里有一杆秤，知道什么时候该进，什么时候该退。',energy:'你的能量来自"转换"。你不惧怕变化，反而能在变化中找到机会。你像立秋的风，把夏天的燥热一点点吹散，又把秋天的凉爽一点点带来。你是天生的"润滑剂"，能让新旧交替变得顺滑。',emotion:'你是平稳的、从容的。你很少有大起大落的情绪，因为你相信"万物皆有其时"。你接受变化，接受失去，也接受新的开始。你不是没有感情，而是你把感情藏在理性之下，让它不成为你的负担。',philosophy:'你信奉"顺势而为"。你不逆势而行，也不随波逐流，而是在潮流中找到自己的节奏。你相信"识时务者为俊杰"，所以你总能在正确的时间做正确的事。你是那种"进退有度"的人。',talent:'极强的适应力与转换力。你能快速适应新环境，能在不同的角色之间自如切换。你是天生的"外交官"，能在不同的人群、不同的文化、不同的规则之间找到平衡点。',growth:'太善于过渡的人，容易失去"立场"。你的课题是——在顺势之外，也要有"坚守"。不是所有变化都值得顺应，有些东西，哪怕逆着风，也要守住。偶尔"逆势而为"一次，你会发现，那才是真正的你。',motto:'云天收夏色，木叶动秋声。愿你转得从容，也守得住本心。'},
+    {name:'处暑',date:'8月22-24日',season:'秋',keywords:['收敛','过渡','平息者'],poem:'处暑无三日，新凉直万金。',portrait:'你是处暑——暑气渐消，秋意初显。你擅长平息混乱、化解冲突，像处暑的风一样把燥热吹散。你温和、克制、不张扬，但你的存在本身就是一种"降温"。你是团队里的"稳定剂"，有你在，再浮躁的气氛也能慢慢平静下来。',energy:'你的能量来自"平息"。你本能地排斥冲突与混乱，渴望秩序与安宁。你像处暑的雨，把夏天的燥热一点点浇灭，让一切回归平静。你不是在"管闲事"，你是在"守护平和"。',emotion:'你是温和的、克制的。你不喜欢大吵大闹，更愿意用平和的方式解决问题。你相信"以柔克刚"，所以你很少正面硬刚，而是用你的温和一点点化解矛盾。你的情绪像秋天的水，波澜不惊，但深不可测。',philosophy:'你信奉"和为贵"。你不喜欢树敌，不喜欢对抗，更愿意"化干戈为玉帛"。你相信"退一步海阔天空"，所以你愿意先低头，不是因为你输了，而是因为你觉得不值得。你是那种"宰相肚里能撑船"的人。',talent:'极强的化解力与包容力。你能把剑拔弩张的气氛变得平和，能把针锋相对的双方拉到谈判桌前。你是天生的"调停者"，你的温和是一种力量，能让所有人都愿意听你说话。',growth:'太能忍的人，容易憋出内伤。你的课题是——该爆发的时候也要爆发。不是所有冲突都能靠"忍"解决，有些人就是得"怼"回去，有些原则就是得"争"到底。你的温和很好，但别忘了，你也有发脾气的权利。',motto:'处暑无三日，新凉直万金。愿你化得了干戈，也守得住锋芒。'},
+    {name:'白露',date:'9月7-9日',season:'秋',keywords:['纯净','诗意','理想主义者'],poem:'蒹葭苍苍，白露为霜。所谓伊人，在水一方。',portrait:'你是白露——露凝而白，清冷纯净。你有一颗诗心，追求纯粹与美好。你敏感、细腻，能感受到别人忽略的美——清晨叶尖上的一滴露、风里淡淡的桂花香、月光洒在地上的影子。但也正因为你太纯粹，所以容易被现实的粗糙刺伤。',energy:'你的能量来自"美好"。你对美有本能的追求，对丑陋有本能的排斥。你像白露一样，只在最干净的夜晚凝结，一旦遇到尘嚣，就会迅速消散。你不是矫情，你只是"出淤泥而不染"。',emotion:'你是纯净的、敏感的。你的心像水晶，通透而易碎。你很容易被感动，也很容易被伤害。你相信"人生若只如初见"，所以你对每一段关系都抱有最纯粹的期待。你的爱是干净的、不掺杂质的，但也是脆弱的。',philosophy:'你信奉"宁为玉碎，不为瓦全"。你不愿意妥协，不愿意将就，你宁愿孤独，也不愿意和不纯粹的人和事为伍。你相信"道不同不相为谋"，所以你的圈子不大，但每一个都是知己。',talent:'极强的感受力与审美力。你能发现别人发现不了的美，能创造出让人心动的作品。你是天生的"艺术家"，你的存在本身就是对"美"的诠释。',growth:'水至清则无鱼。你的课题是——接受"不完美"。这个世界不是非黑即白的，有些事即使不纯粹，也值得去经历；有些人即使有瑕疵，也值得去交往。允许自己"入世"一点，你会发现，烟火气里也有诗意。',motto:'蒹葭苍苍，白露为霜。愿你守得住纯粹，也容得下尘嚣。'},
+    {name:'秋分',date:'9月22-24日',season:'秋',keywords:['均衡','理性','思考者'],poem:'金气秋分，风清露冷秋期半。',portrait:'你是秋分——昼夜均分，秋色正中。你是秋天的中心，理性、均衡、不偏不倚。你善于思考，追求真理，是天生的"智囊"。你能在纷繁复杂的信息中找到逻辑，能在众说纷纭中找到答案。你是那种"众人皆醉我独醒"的人，但你的清醒不伤人，反而让人安心。',energy:'你的能量来自"真相"。你对"为什么"有本能的好奇，对"是什么"有执着的追问。你像秋分的天平，不偏不倚地衡量每一个观点，直到找到最接近真相的那一个。你不是在钻牛角尖，你是在"求真"。',emotion:'你是冷静的、理性的。你不喜欢被情绪左右，更愿意用逻辑来分析一切。你的喜怒哀乐都经过"思考"的过滤，所以你很少失控，也很少冲动。你不是没有感情，而是你把感情放在理性之后。',philosophy:'你信奉"格物致知"。你相信万物皆有理，凡事皆有因。你不喜欢"凭感觉"，更愿意"讲道理"。你是那种"先把事情想清楚再行动"的人，你的每一步都有据可依，每一个决定都经得起推敲。',talent:'极强的分析力与逻辑思维。你能把复杂的问题拆解成简单的模块，能在混乱中找到规律。你是天生的"军师"，你的建议往往一针见血，让人茅塞顿开。',growth:'太理性的人，容易变成"冷血"。你的课题是——允许自己"感性"一次。不是所有事都需要讲道理，不是所有人都需要被分析。有时候，一个拥抱比一万句道理都管用。让你的心偶尔走在脑子前面，你会发现，感性也是一种智慧。',motto:'金气秋分，风清露冷。愿你想得透彻，也爱得温热。'},
+    {name:'寒露',date:'10月8-9日',season:'秋',keywords:['深沉','内敛','观察者'],poem:'寒露惊秋晚，朝看菊渐黄。',portrait:'你是寒露——露气寒冷，将凝结也。你深沉、内敛，像寒露一样安静而有分量。你不轻易表露自己，但你的内心世界极其丰富。你善于观察，能在沉默中读懂一切。你是那种"话不多，但什么都看在眼里"的人，你的沉默不是空白，而是深思。',energy:'你的能量来自"深度"。你不喜欢浅尝辄止，更愿意深入探究。你像寒露，在安静中凝结，在沉默中积累力量。你不是没话说，而是你觉得"话要说给懂的人听"，所以你选择沉默，等待那个能懂你的人。',emotion:'你是深沉的、内敛的。你的感情像深潭，表面平静，底下暗流涌动。你不轻易表达，但你的每一次表达都分量十足。你相信"情深不寿，强极则辱"，所以你把感情藏得很深，只在最信任的人面前流露。',philosophy:'你信奉"沉默是金"。你不喜欢争辩，不喜欢解释，更愿意用行动证明一切。你相信"懂你的人不需要解释，不懂你的人解释也没用"。你是那种"桃李不言，下自成蹊"的人。',talent:'极强的观察力与深度思考力。你能在别人忽略的细节里发现关键，能在表面现象下看到本质。你是天生的"观察者"，你的沉默让你看到了更多别人看不到的东西。',growth:'太冷了，会让人望而却步。你的课题是——偶尔"热"一点。不是所有人都有耐心去融化你的冷漠，有些人你不主动，就永远错过了。把你的温度稍微调高一点，你会发现，这个世界比你想象的要温暖。',motto:'寒露惊秋晚，朝看菊渐黄。愿你沉得下心，也暖得了人。'},
+    {name:'霜降',date:'10月23-24日',season:'秋',keywords:['坚韧','冷峻','守护者'],poem:'霜降水返壑，风落木归山。',portrait:'你是霜降——气肃而凝，露结为霜。你是秋天的最后一道防线，冷峻、坚韧、不可动摇。你看似冷漠，实则用自己的方式守护着在乎的人和事。你是那种"刀子嘴豆腐心"的人，嘴上说着狠话，心里却比谁都软。你用坚硬的外壳，保护着柔软的内心。',energy:'你的能量来自"守护"。你本能地想要保护你在乎的人、事、物，哪怕为此付出代价。你像霜降，用寒冷挡住了冬天的脚步，为秋天守住最后的温暖。你不是在"逞强"，你是在"坚守"。',emotion:'你是坚硬的、隐忍的。你不喜欢示弱，不喜欢求助，更愿意自己扛下一切。你的眼泪只在没人的时候流，你的脆弱只在深夜里展露。你相信"靠人不如靠己"，所以你把自己活成了一座山。',philosophy:'你信奉"宁可人负我，不可我负人"。你有自己的原则和底线，不轻易妥协，不轻易放弃。你相信"守得云开见月明"，所以你愿意用最长的时间，去守最值得的东西。你是那种"咬定青山不放松"的人。',talent:'极强的坚韧力与守护力。你能在最艰难的时候坚持到底，能为你在乎的人撑起一片天。你是天生的"守护者"，你的存在本身就是一种安全感。',growth:'太硬了，会断。你的课题是——学会柔软。不是所有事都需要你一个人扛，不是所有人都需要你去保护。偶尔示弱，偶尔求助，偶尔让自己"软"一点，你会发现，你不是一个人在战斗。',motto:'霜降水返壑，风落木归山。愿你守得住坚硬，也放得下柔软。'}
+  ],
+  winter: [
+    {name:'立冬',date:'11月7-8日',season:'冬',keywords:['蛰伏','积蓄','准备者'],poem:'立冬之日，水始冰，地始冻。',portrait:'你是立冬——冬之伊始，万物收藏。你懂得在该蛰伏的时候蛰伏，该积蓄的时候积蓄。你不急不躁，相信厚积薄发。你是"大器晚成"的类型，你的光芒不在少年时，而在岁月沉淀之后。你像冬天的种子，看似沉睡，实则在黑暗中积蓄着破土的力量。',energy:'你的能量来自"沉淀"。你不喜欢张扬，更愿意默默积累。你像立冬的大地，把所有的养分都收进土里，为来年的春天做准备。你不是在"躺平"，你是在"蓄势"——等待那个属于你的"立春"。',emotion:'你是内敛的、深沉的。你不轻易表露情绪，但你的每一次表露都发自肺腑。你相信"日久见人心"，所以你不愿意用言语证明什么，更愿意用时间和行动来证明。你的爱是沉默的，但是持久的。',philosophy:'你信奉"韬光养晦"。你不喜欢出风头，不喜欢抢功劳，更愿意在幕后默默做事。你相信"是金子总会发光"，所以你愿意等，愿意熬，愿意用时间换空间。你是那种"不鸣则已，一鸣惊人"的人。',talent:'极强的耐力与长远眼光。你能在看不到希望的时候继续坚持，能为了一个长远的目标忍受当下的寂寞。你是天生的"长期主义者"，你的优势不在当下，而在未来。',growth:'太能忍的人，容易错过时机。你的课题是——该出手时就出手。不是所有时候都适合"蛰伏"，有些机会一旦错过就不会再来。偶尔"主动出击"一次，你会发现，你积累的那些力量，早就足够你破土而出了。',motto:'冬之伊始，万物收藏。愿你沉得住气，也抓得住机。'},
+    {name:'小雪',date:'11月22-23日',season:'冬',keywords:['轻盈','灵动','浪漫者'],poem:'小雪初晴，天地一色。',portrait:'你是小雪——雪未盛，轻盈灵动。你像初雪一样，轻盈、浪漫、带着诗意。你不沉重，总能在平凡的日子里发现小确幸。你是那种"给点阳光就灿烂"的人，你的快乐很简单，简单到一片雪花就能让你开心一整天。你用轻盈的姿态，对抗着世界的沉重。',energy:'你的能量来自"轻盈"。你不喜欢沉重，不喜欢复杂，更愿意用简单的方式看世界。你像小雪，飘飘洒洒，不疾不徐，落在地上就化了，不留痕迹。你不是在"逃避"，你是在"选择"——选择用轻松的方式，过好每一天。',emotion:'你是浪漫的、灵动的。你的心像初雪，纯净而易逝。你容易被美好的事物打动，也容易被小小的温暖治愈。你相信"生活不止眼前的苟且，还有诗和远方"，所以你总能在琐碎里找到浪漫。',philosophy:'你信奉"知足常乐"。你不追求大富大贵，只想要"小确幸"——一杯热饮、一部好电影、一个阳光明媚的下午。你相信"简单就是幸福"，所以你不愿意把生活搞得太复杂。你是那种"把日子过成诗"的人。',talent:'极强的感受力与创造力。你能在平凡里发现不凡，能在琐碎里创造美好。你是天生的"生活家"，你的存在本身就是对"小确幸"最好的诠释。',growth:'太轻盈了，会缺乏分量。你的课题是——学会"厚重"。不是所有事都能"轻飘飘"地过去，有些责任需要你承担，有些困难需要你面对。偶尔"沉"一点，你会发现，厚重不是负担，而是让你站稳脚跟的根基。',motto:'小雪初晴，天地一色。愿你活得轻盈，也站得安稳。'},
+    {name:'大雪',date:'12月6-8日',season:'冬',keywords:['厚重','包容','承载者'],poem:'大雪纷飞，万物归藏。',portrait:'你是大雪——雪盛地白，覆盖万物。你厚重、包容，像大雪一样能承载一切。你沉默但有力量，是朋友最坚实的后盾。你是那种"不说但都做了"的人，你的爱不在嘴上，在行动里。你像大雪，悄无声息地覆盖了整个世界，给所有人带来一片洁白。',energy:'你的能量来自"承载"。你本能地想要接住别人的重量，扛起别人的负担。你像大雪，用自己的厚度，为大地保温，为万物御寒。你不是在"逞强"，你是在"扛"——因为你知道，总有人要扛。',emotion:'你是厚重的、沉默的。你不擅长表达感情，但你的行动比任何言语都有力。你相信"大爱无言"，所以你愿意用"做"来代替"说"。你的爱是踏实的、可靠的，是那种"不管发生什么，我都在"的笃定。',philosophy:'你信奉"厚德载物"。你不喜欢计较，不喜欢抱怨，更愿意默默承担。你相信"吃亏是福"，所以你愿意多做一点，多扛一点。你是那种"宰相肚里能撑船"的人，你的心胸像大雪覆盖的大地一样宽广。',talent:'极强的包容力与承载力。你能容纳别人的缺点，能扛住别人扛不住的压力。你是天生的"后盾"，有你在，身边的人就有了依靠。',growth:'太能扛了，会把自己压垮。你的课题是——学会"放下"。不是所有事都需要你扛，不是所有人都值得你付出。偶尔让自己"轻"一点，你会发现，你不需要一个人撑起整个世界，有人愿意和你一起扛。',motto:'大雪纷飞，万物归藏。愿你扛得起天下，也放得下自己。'},
+    {name:'冬至',date:'12月21-23日',season:'冬',keywords:['极致','转折','至暗时刻'],poem:'冬至一阳生，天时转日长。',portrait:'你是冬至——日短之至，夜长之极。你经历过至暗时刻，但正因如此，你懂得光明的可贵。你深沉、有韧性，是"否极泰来"的践行者。你像最长的那个夜，黑暗到了极致，但也正是从这一刻起，白昼开始一天天变长。你是"绝望中的希望"。',energy:'你的能量来自"韧性"。你打不倒，压不垮，越是艰难，你越能撑住。你像冬至的夜，再长也会过去，再黑也有尽头。你不是没有绝望过，但你在绝望里找到了"再撑一下"的力量。',emotion:'你是深沉的、坚韧的。你经历过太多，所以你的感情里有一种"沧桑后的温柔"。你不轻易相信，但一旦相信，就义无反顾。你相信"风雨之后见彩虹"，所以你愿意等，愿意熬，愿意在黑暗中守候黎明。',philosophy:'你信奉"否极泰来"。你相信物极必反，相信最黑暗的时候，就是转机来临的时候。你不害怕低谷，因为你知道，低谷之后就是上坡。你是那种"在废墟上开出花"的人。',talent:'极强的韧性与复原力。你能在最绝望的时候找到希望，能在最黑暗的时候等到光明。你是天生的"幸存者"，你的存在本身就是对"坚持"最好的诠释。',growth:'经历过黑暗的人，容易变得"防备"。你的课题是——重新学会"相信"。不是所有人都会伤害你，不是所有事都会变坏。把心门打开一条缝，你会发现，光明其实一直都在，只是你把它挡在了外面。',motto:'冬至一阳生，天时转日长。愿你守得过暗夜，也迎得了曙光。'},
+    {name:'小寒',date:'1月5-7日',season:'冬',keywords:['清冷','独立','独行者'],poem:'小寒连大吕，欢鹊垒新巢。',portrait:'你是小寒——寒气渐盛，未到极点。你清冷、独立，像小寒的风，不凛冽但让人清醒。你享受独处，不随波逐流，有自己的节奏。你是那种"众人皆醉我独醒"的人，你不愿意为了合群而妥协，宁愿孤独，也要做自己。',energy:'你的能量来自"独立"。你不依赖任何人，不迎合任何人，你只做你自己。你像小寒的梅，在最冷的时候独自开放，不为谁，只为自己。你不是在"孤僻"，你是在"坚守"——坚守那个独一无二的自己。',emotion:'你是清冷的、独立的。你不喜欢黏腻的关系，更愿意保持一点距离。你相信"君子之交淡如水"，所以你的朋友不多，但每一个都是真朋友。你的爱是克制的、有分寸的，是那种"我在，但不打扰"的温柔。',philosophy:'你信奉"特立独行"。你不随大流，不人云亦云，你有自己的判断和选择。你相信"走自己的路，让别人说去吧"，所以你不在乎别人的眼光，只在乎自己的内心。你是那种"宁做独一无二的自己，不做千篇一律的别人"的人。',talent:'极强的独立性与判断力。你能在喧嚣中保持清醒，能在洪流中坚持自我。你是天生的"独行者"，你的存在本身就是对"与众不同"最好的诠释。',growth:'太独立了，会变成"孤岛"。你的课题是——学会"连接"。不是所有时候都需要一个人扛，不是所有事都能一个人解决。偶尔向别人伸出手，你会发现，这个世界上有人愿意和你一起走。',motto:'小寒连大吕，欢鹊垒新巢。愿你独立得清醒，也温柔得有温度。'},
+    {name:'大寒',date:'1月20-21日',season:'冬',keywords:['极致','坚韧','终结者'],poem:'大寒须遣酒争豪，重衾不怕晓寒侵。',portrait:'你是大寒——寒气之逆极，故谓大寒。你是冬天的终极形态，坚韧、极致、不可摧折。你经历过最冷的寒冬，所以无所畏惧。你是那种"千磨万击还坚劲，任尔东西南北风"的人，你的骨子里有一种"打不倒"的力量。但你也要记得——大寒之后，就是立春。',energy:'你的能量来自"极致"。你要么不做，要做就做到最好；要么不扛，要扛就扛到最后。你像大寒的冰，硬到了极致，但也正因如此，你无所畏惧。你不是在"硬撑"，你是在"淬炼"——把自己淬炼成最坚硬的模样。',emotion:'你是冷峻的、坚韧的。你不轻易流露感情，因为你觉得"感情是软肋"。你用冷漠保护自己，用坚硬武装自己。但在那层寒冰之下，藏着一颗比谁都柔软的心。你相信"真正的强者，是含着眼泪奔跑的人"。',philosophy:'你信奉"坚韧不拔"。你不轻易放弃，不轻易认输，你相信"只要还活着，就没有输"。你能在最艰难的环境里生存，能在最绝望的境地里找到出路。你是那种"置之死地而后生"的人。',talent:'极强的抗压能力与坚韧精神。你能扛住别人扛不住的压力，能熬过别人熬不过的难关。你是天生的"战士"，你的存在本身就是对"永不放弃"最好的诠释。',growth:'太冷太硬了，会让人望而生畏。你的课题是——学会"融化"。不是所有时候都需要那么硬，不是所有人都需要你防备。偶尔让自己"暖"一点，你会发现，你不需要一个人对抗整个世界，有人愿意给你温暖。',motto:'寒气之逆极，故谓大寒。愿你坚如冰，也柔如春。大寒之后，便是立春。'}
+  ]
+};
+
+const seasonLabels = {spring:'春 之 节 气', summer:'夏 之 节 气', autumn:'秋 之 节 气', winter:'冬 之 节 气'};
+
+let currentIdx = 0;
+let scores = {A:0, B:0, C:0, D:0};
+let dimCounts = {A:0, B:0, C:0, D:0};
+
+// 统一页面切换函数
+function showPage(pageId) {
+  const pages = ['startPage', 'quizPage', 'loadingPage', 'resultPage'];
+  pages.forEach(id => {
+    const el = document.getElementById(id);
+    if (id === 'startPage') {
+      el.style.display = (id === pageId) ? 'block' : 'none';
+    } else {
+      el.classList.toggle('active', id === pageId);
+    }
+  });
+  window.scrollTo(0, 0);
+}
+
+function startQuiz() {
+  showPage('quizPage');
+  currentIdx = 0;
+  scores = {A:0, B:0, C:0, D:0};
+  dimCounts = {A:0, B:0, C:0, D:0};
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = questions[currentIdx];
+  document.getElementById('currentNum').textContent = currentIdx + 1;
+  document.getElementById('progressFill').style.width = ((currentIdx) / questions.length * 100) + '%';
+  document.getElementById('questionNum').textContent = '第 ' + chNum[currentIdx] + ' 题';
+  document.getElementById('questionText').textContent = q.q;
+  
+  const container = document.getElementById('optionsContainer');
+  container.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    const letterSpan = document.createElement('span');
+    letterSpan.className = 'option-letter';
+    letterSpan.textContent = letters[i];
+    btn.appendChild(letterSpan);
+    const textSpan = document.createElement('span');
+    textSpan.textContent = opt;
+    btn.appendChild(textSpan);
+    btn.onclick = () => selectOption(i);
+    container.appendChild(btn);
+  });
+}
+
+function selectOption(idx) {
+  const q = questions[currentIdx];
+  const score = q.reverse ? (4 - idx) : (idx + 1);
+  scores[q.dim] += score;
+  dimCounts[q.dim]++;
+  
+  if (currentIdx < questions.length - 1) {
+    currentIdx++;
+    setTimeout(showQuestion, 200);
+  } else {
+    document.getElementById('progressFill').style.width = '100%';
+    setTimeout(calcResult, 400);
+  }
+}
+
+function calcResult() {
+  showPage('loadingPage');
+  
+  const pct = {};
+  for (let d of ['A','B','C','D']) {
+    const max = dimCounts[d] * 4;
+    pct[d] = Math.round((scores[d] / max) * 100);
+  }
+  
+  let season;
+  if (pct.A >= 50 && pct.B >= 50) season = 'summer';
+  else if (pct.A >= 50 && pct.B < 50) season = 'spring';
+  else if (pct.A < 50 && pct.B >= 50) season = 'winter';
+  else season = 'autumn';
+  
+  const cdAvg = (pct.C + pct.D) / 2;
+  let pos;
+  if (cdAvg <= 16) pos = 0;
+  else if (cdAvg <= 33) pos = 1;
+  else if (cdAvg <= 50) pos = 2;
+  else if (cdAvg <= 66) pos = 3;
+  else if (cdAvg <= 83) pos = 4;
+  else pos = 5;
+  
+  const result = solarTerms[season][pos];
+  
+  setTimeout(() => {
+    showResult(result, season);
+  }, 1200);
+}
+
+function showResult(r, season) {
+  document.body.className = 'season-' + season;
+  showPage('resultPage');
+  
+  document.getElementById('resultSeasonLabel').textContent = seasonLabels[season];
+  document.getElementById('resultName').textContent = r.name;
+  document.getElementById('resultSeasonTag').textContent = r.season + ' · ' + r.date;
+  
+  const kwContainer = document.getElementById('resultKeywords');
+  kwContainer.innerHTML = '';
+  r.keywords.forEach(k => {
+    const span = document.createElement('span');
+    span.className = 'keyword';
+    span.textContent = k;
+    kwContainer.appendChild(span);
+  });
+  
+  document.getElementById('resultPoem').textContent = r.poem;
+  document.getElementById('portrait').textContent = r.portrait;
+  document.getElementById('energy').textContent = r.energy;
+  document.getElementById('emotion').textContent = r.emotion;
+  document.getElementById('philosophy').textContent = r.philosophy;
+  document.getElementById('talent').textContent = r.talent;
+  document.getElementById('growth').textContent = r.growth;
+  document.getElementById('motto').textContent = r.motto;
+  
+  // 渲染节气图示
+  document.getElementById('termIllustration').innerHTML = termSVGs[r.name] || '';
+  
+  // 渲染四维分析
+  renderDimensions();
+
+  // 上报结果到 Supabase（异步，失败不影响展示）
+  reportResultToSupabase(r.name);
+  
+  window.scrollTo(0, 0);
+}
+
+// 维度定义
+const dimConfig = [
+  {key:'A', name:'外倾能量', desc:'你从外界还是内在获取能量'},
+  {key:'B', name:'感性指数', desc:'你做决定时更随心还是更理性'},
+  {key:'C', name:'行动节奏', desc:'你做事的速度与节奏偏好'},
+  {key:'D', name:'求新指数', desc:'你对新鲜事物的接受程度'}
+];
+
+function getDimLevel(score) {
+  if (score >= 75) return '很高';
+  if (score >= 60) return '较高';
+  if (score >= 40) return '中等';
+  if (score >= 25) return '较低';
+  return '很低';
+}
+
+function renderDimensions() {
+  const container = document.getElementById('dimensionsContainer');
+  container.innerHTML = '';
+  const pct = {};
+  for (let d of ['A','B','C','D']) {
+    const max = dimCounts[d] * 4;
+    pct[d] = Math.round((scores[d] / max) * 100);
+  }
+  
+  const colorMap = {
+    A: 'var(--spring-deep)',
+    B: 'var(--summer-deep)',
+    C: 'var(--autumn-deep)',
+    D: 'var(--winter-deep)'
+  };
+  
+  dimConfig.forEach(dim => {
+    const score = pct[dim.key];
+    const level = getDimLevel(score);
+    const item = document.createElement('div');
+    item.className = 'dim-item';
+    item.innerHTML = `
+      <div class="dim-header">
+        <span class="dim-name">${dim.name}</span>
+        <span><span class="dim-score">${score}</span><span class="dim-level">${level}</span></span>
+      </div>
+      <div class="dim-bar">
+        <div class="dim-bar-fill" style="width:0%; background:${colorMap[dim.key]};"></div>
+      </div>
+    `;
+    container.appendChild(item);
+  });
+  
+  // 动画填充
+  setTimeout(() => {
+    dimConfig.forEach((dim, i) => {
+      const fill = container.querySelectorAll('.dim-bar-fill')[i];
+      fill.style.width = pct[dim.key] + '%';
+    });
+  }, 300);
+}
+
+// 24节气SVG图示
+const termSVGs = {
+  '立春': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#A8C3A0" stroke-width="1.5" opacity="0.4"/><path d="M60 85 C55 70 50 60 60 45 C70 60 65 70 60 85Z" fill="#7BA084" opacity="0.8"/><path d="M60 85 L60 100" stroke="#7BA084" stroke-width="2"/><circle cx="60" cy="40" r="4" fill="#A8C3A0"/></svg>',
+  '雨水': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#A8B5C4" stroke-width="1.5" opacity="0.4"/><path d="M50 50 C50 58 45 62 45 70 C45 76 55 76 55 70 C55 62 50 58 50 50Z" fill="#7A94A8" opacity="0.7"/><path d="M70 45 C70 53 65 57 65 65 C65 71 75 71 75 65 C75 57 70 53 70 45Z" fill="#7A94A8" opacity="0.7"/><path d="M40 70 C40 76 36 80 36 86 C36 90 44 90 44 86 C44 80 40 76 40 70Z" fill="#A8B5C4" opacity="0.6"/></svg>',
+  '惊蛰': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#C4A882" stroke-width="1.5" opacity="0.4"/><path d="M65 25 L45 60 L58 60 L50 95 L78 55 L63 55 L72 25Z" fill="#A08454" opacity="0.8"/></svg>',
+  '春分': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#A8C3A0" stroke-width="1.5" opacity="0.4"/><line x1="15" y1="60" x2="105" y2="60" stroke="#7BA084" stroke-width="2"/><circle cx="60" cy="60" r="18" fill="none" stroke="#7BA084" stroke-width="2"/><circle cx="60" cy="60" r="4" fill="#7BA084"/></svg>',
+  '清明': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#A8C3A0" stroke-width="1.5" opacity="0.4"/><path d="M60 30 C55 40 55 50 60 55 C65 50 65 40 60 30Z" fill="#7BA084" opacity="0.7"/><path d="M50 50 C45 58 48 65 55 68" stroke="#7BA084" stroke-width="1.5" fill="none"/><path d="M70 50 C75 58 72 65 65 68" stroke="#7BA084" stroke-width="1.5" fill="none"/><path d="M60 55 L60 90" stroke="#7BA084" stroke-width="2"/></svg>',
+  '谷雨': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#C4A882" stroke-width="1.5" opacity="0.4"/><path d="M60 25 L60 90" stroke="#A08454" stroke-width="2"/><path d="M50 40 L70 40 M50 55 L70 55 M50 70 L70 70" stroke="#A08454" stroke-width="1.5"/><circle cx="60" cy="100" r="5" fill="#A08454" opacity="0.6"/></svg>',
+  '立夏': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#D4A5A5" stroke-width="1.5" opacity="0.4"/><circle cx="60" cy="60" r="18" fill="#B07878" opacity="0.8"/><g stroke="#B07878" stroke-width="2" opacity="0.7"><line x1="60" y1="25" x2="60" y2="35"/><line x1="60" y1="85" x2="60" y2="95"/><line x1="25" y1="60" x2="35" y2="60"/><line x1="85" y1="60" x2="95" y2="60"/><line x1="35" y1="35" x2="42" y2="42"/><line x1="78" y1="78" x2="85" y2="85"/><line x1="85" y1="35" x2="78" y2="42"/><line x1="42" y1="78" x2="35" y2="85"/></g></svg>',
+  '小满': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#D4A5A5" stroke-width="1.5" opacity="0.4"/><path d="M50 30 L50 90 M60 25 L60 90 M70 30 L70 90" stroke="#B07878" stroke-width="2"/><path d="M45 40 Q50 35 55 40 M55 40 Q60 35 65 40 M65 40 Q70 35 75 40" stroke="#B07878" stroke-width="1.5" fill="none"/></svg>',
+  '芒种': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#C4A882" stroke-width="1.5" opacity="0.4"/><path d="M40 90 L80 40" stroke="#A08454" stroke-width="3" stroke-linecap="round"/><path d="M75 40 L80 40 L80 45" stroke="#A08454" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M50 55 C55 50 60 52 62 58" stroke="#A08454" stroke-width="1.5" fill="none"/></svg>',
+  '夏至': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#D4A5A5" stroke-width="1.5" opacity="0.4"/><circle cx="60" cy="60" r="22" fill="#B07878" opacity="0.8"/><g stroke="#B07878" stroke-width="2.5" opacity="0.6"><line x1="60" y1="18" x2="60" y2="28"/><line x1="60" y1="92" x2="60" y2="102"/><line x1="18" y1="60" x2="28" y2="60"/><line x1="92" y1="60" x2="102" y2="60"/></g></svg>',
+  '小暑': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#C4A882" stroke-width="1.5" opacity="0.4"/><path d="M30 55 Q45 50 60 55 Q75 60 90 55" stroke="#A08454" stroke-width="2" fill="none" opacity="0.7"/><path d="M30 65 Q45 60 60 65 Q75 70 90 65" stroke="#A08454" stroke-width="2" fill="none" opacity="0.5"/><circle cx="60" cy="40" r="12" fill="#A08454" opacity="0.5"/></svg>',
+  '大暑': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#D4A5A5" stroke-width="1.5" opacity="0.4"/><circle cx="60" cy="60" r="26" fill="#B07878" opacity="0.7"/><g stroke="#B07878" stroke-width="3" opacity="0.5"><line x1="60" y1="15" x2="60" y2="25"/><line x1="60" y1="95" x2="60" y2="105"/><line x1="15" y1="60" x2="25" y2="60"/><line x1="95" y1="60" x2="105" y2="60"/></g></svg>',
+  '立秋': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#C4A882" stroke-width="1.5" opacity="0.4"/><path d="M60 40 C65 50 65 60 60 70 C55 60 55 50 60 40Z" fill="#A08454" opacity="0.7"/><path d="M60 70 L60 95" stroke="#A08454" stroke-width="2"/><path d="M60 55 C65 55 70 58 72 62" stroke="#A08454" stroke-width="1.5" fill="none"/></svg>',
+  '处暑': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#A8B5C4" stroke-width="1.5" opacity="0.4"/><path d="M30 50 Q45 45 60 50 Q75 55 90 50" stroke="#7A94A8" stroke-width="2" fill="none"/><path d="M30 60 Q45 55 60 60 Q75 65 90 60" stroke="#7A94A8" stroke-width="2" fill="none" opacity="0.7"/><path d="M30 70 Q45 65 60 70 Q75 75 90 70" stroke="#7A94A8" stroke-width="2" fill="none" opacity="0.5"/></svg>',
+  '白露': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#A8B5C4" stroke-width="1.5" opacity="0.4"/><circle cx="50" cy="55" r="10" fill="#7A94A8" opacity="0.6"/><circle cx="70" cy="65" r="7" fill="#7A94A8" opacity="0.5"/><circle cx="55" cy="75" r="5" fill="#A8B5C4" opacity="0.6"/></svg>',
+  '秋分': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#C4A882" stroke-width="1.5" opacity="0.4"/><line x1="60" y1="20" x2="60" y2="100" stroke="#A08454" stroke-width="2"/><path d="M45 40 L60 30 L75 40 L60 50Z" fill="#A08454" opacity="0.6"/><path d="M45 80 L60 70 L75 80 L60 90Z" fill="#A08454" opacity="0.6"/></svg>',
+  '寒露': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#A8B5C4" stroke-width="1.5" opacity="0.4"/><path d="M45 50 C45 58 42 62 42 68 C42 74 52 74 52 68 C52 62 45 58 45 50Z" fill="#7A94A8" opacity="0.7"/><path d="M65 45 C65 52 62 56 62 62 C62 67 72 67 72 62 C72 56 65 52 65 45Z" fill="#7A94A8" opacity="0.6"/></svg>',
+  '霜降': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#C4A882" stroke-width="1.5" opacity="0.4"/><g stroke="#A08454" stroke-width="1.5" opacity="0.7"><path d="M40 40 L50 50 M50 40 L40 50"/><path d="M70 40 L80 50 M80 40 L70 50"/><path d="M40 70 L50 80 M50 70 L40 80"/><path d="M70 70 L80 80 M80 70 L70 80"/></g><path d="M55 55 L65 65 M65 55 L55 65" stroke="#A08454" stroke-width="2" opacity="0.8"/></svg>',
+  '立冬': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#A8B5C4" stroke-width="1.5" opacity="0.4"/><path d="M30 60 L45 50 L45 70Z" fill="#7A94A8" opacity="0.6"/><path d="M50 55 L65 45 L65 65Z" fill="#7A94A8" opacity="0.7"/><path d="M70 50 L85 40 L85 60Z" fill="#7A94A8" opacity="0.6"/></svg>',
+  '小雪': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#A8B5C4" stroke-width="1.5" opacity="0.4"/><g stroke="#7A94A8" stroke-width="1.5" opacity="0.7"><circle cx="50" cy="50" r="1"/><circle cx="70" cy="55" r="1"/><circle cx="55" cy="70" r="1"/><circle cx="75" cy="75" r="1"/></g><path d="M45 45 L48 48 M48 45 L45 48" stroke="#7A94A8" stroke-width="1.5"/></svg>',
+  '大雪': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#A8B5C4" stroke-width="1.5" opacity="0.4"/><g stroke="#7A94A8" stroke-width="1.5" opacity="0.8"><circle cx="45" cy="45" r="2" fill="#7A94A8"/><circle cx="75" cy="50" r="2" fill="#7A94A8"/><circle cx="55" cy="65" r="2" fill="#7A94A8"/><circle cx="75" cy="75" r="2" fill="#7A94A8"/><circle cx="40" cy="75" r="2" fill="#7A94A8"/></g></svg>',
+  '冬至': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#A8B5C4" stroke-width="1.5" opacity="0.4"/><circle cx="60" cy="60" r="20" fill="none" stroke="#7A94A8" stroke-width="2"/><path d="M60 40 A20 20 0 0 1 60 80 A10 10 0 0 0 60 40Z" fill="#7A94A8" opacity="0.6"/></svg>',
+  '小寒': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#A8B5C4" stroke-width="1.5" opacity="0.4"/><path d="M60 30 L60 90 M35 45 L85 75 M85 45 L35 75" stroke="#7A94A8" stroke-width="2" opacity="0.7"/><circle cx="60" cy="60" r="4" fill="#7A94A8"/></svg>',
+  '大寒': '<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="55" fill="none" stroke="#A8B5C4" stroke-width="1.5" opacity="0.4"/><g stroke="#7A94A8" stroke-width="2" opacity="0.8"><path d="M50 40 L60 30 L70 40 L60 50Z" fill="#7A94A8" fill-opacity="0.3"/><path d="M45 60 L55 50 L65 60 L55 70Z" fill="#7A94A8" fill-opacity="0.3"/><path d="M55 75 L65 65 L75 75 L65 85Z" fill="#7A94A8" fill-opacity="0.3"/></g></svg>'
+};
+
+function restart() {
+  document.body.className = '';
+  showPage('startPage');
+}
+
+function shareResult() {
+  const name = document.getElementById('resultName').textContent;
+  const motto = document.getElementById('motto').textContent;
+  const text = '我是二十四节气中的「' + name + '」\n\n' + motto + '\n\n——来测测你是哪个节气吧';
+  
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('结果已复制到剪贴板，快去分享吧！');
+    }).catch(() => {
+      alert(text);
+    });
+  } else {
+    alert(text);
+  }
+}
+
+// 季节配色
+const seasonColors = {
+  spring: {bg:'#EDEEE8', card:'#FBF9F5', main:'#7BA084', sub:'#A8C3A0', ink:'#3D3D3D'},
+  summer: {bg:'#EDE8E8', card:'#FBF9F5', main:'#B07878', sub:'#D4A5A5', ink:'#3D3D3D'},
+  autumn: {bg:'#EDEAE3', card:'#FBF9F5', main:'#A08454', sub:'#C4A882', ink:'#3D3D3D'},
+  winter: {bg:'#E8EAED', card:'#FBF9F5', main:'#7A94A8', sub:'#A8B5C4', ink:'#3D3D3D'}
+};
+
+let currentResult = null;
+let currentSeason = null;
+
+function openBookmarkModal() {
+  currentResult = {
+    name: document.getElementById('resultName').textContent,
+    season: document.getElementById('resultSeasonTag').textContent,
+    keywords: Array.from(document.querySelectorAll('.keyword')).map(k => k.textContent),
+    motto: document.getElementById('motto').textContent,
+    poem: document.getElementById('resultPoem').textContent
+  };
+  currentSeason = document.body.className.replace('season-', '');
+  
+  const img = generateBookmark(currentResult, currentSeason);
+  document.getElementById('bookmarkPreview').src = img;
+  document.getElementById('bookmarkModal').classList.add('active');
+}
+
+function closeBookmarkModal() {
+  document.getElementById('bookmarkModal').classList.remove('active');
+}
+
+function saveBookmark() {
+  const img = document.getElementById('bookmarkPreview').src;
+  const a = document.createElement('a');
+  a.href = img;
+  a.download = currentResult.name + '_节气书签.png';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+// Canvas绘制书签 - 24节气植物主题
+const termPlantData = {
+  // 春（绿色系，由浅到深）
+  '立春': { plant:'梅花', color:'#9DCC9A' },
+  '雨水': { plant:'兰花', color:'#8CC08E' },
+  '惊蛰': { plant:'桃花', color:'#7BB482' },
+  '春分': { plant:'樱花', color:'#6AA876' },
+  '清明': { plant:'柳', color:'#599C6A' },
+  '谷雨': { plant:'牡丹', color:'#48905E' },
+  // 夏（粉色系，由浅到深）
+  '立夏': { plant:'石榴花', color:'#E8A5A5' },
+  '小满': { plant:'麦穗', color:'#DF9595' },
+  '芒种': { plant:'栀子', color:'#D68585' },
+  '夏至': { plant:'荷花', color:'#CD7575' },
+  '小暑': { plant:'茉莉', color:'#C46565' },
+  '大暑': { plant:'睡莲', color:'#BB5555' },
+  // 秋（金色系，由浅到深）
+  '立秋': { plant:'向日葵', color:'#E8C870' },
+  '处暑': { plant:'玉簪', color:'#DFBD60' },
+  '白露': { plant:'桂花', color:'#D6B250' },
+  '秋分': { plant:'菊花', color:'#CDA740' },
+  '寒露': { plant:'芙蓉', color:'#C49C30' },
+  '霜降': { plant:'枫', color:'#BB9120' },
+  // 冬（蓝色系，由浅到深）
+  '立冬': { plant:'芦苇', color:'#A8C4D4' },
+  '小雪': { plant:'山茶', color:'#97B6C7' },
+  '大雪': { plant:'腊梅', color:'#86A8BA' },
+  '冬至': { plant:'水仙', color:'#759AAD' },
+  '小寒': { plant:'蜡梅', color:'#648CA0' },
+  '大寒': { plant:'松', color:'#537E93' }
+};
+
+function generateBookmark(r, season) {
+  const data = termPlantData[r.name] || { plant:'花', color:'#9DCC9A' };
+  const baseColor = data.color;
+  const cLight = shadeColor(baseColor, 55);
+  const cMid = shadeColor(baseColor, 20);
+  const cDark = shadeColor(baseColor, -30);
+  
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  const W = 750, H = 1334;
+  canvas.width = W;
+  canvas.height = H;
+  
+  // 上方2/3：白色背景
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillRect(0, 0, W, H);
+  
+  // 宣纸纹理（整体）
+  drawPaperTexture(ctx, W, H);
+  
+  // 顶部英文小字
+  ctx.fillStyle = cDark;
+  ctx.globalAlpha = 0.35;
+  ctx.font = '16px "Noto Serif SC", serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('TWENTY-FOUR SOLAR TERMS', W/2, 60);
+  ctx.fillText('PERSONALITY TEST', W/2, 82);
+  ctx.globalAlpha = 1;
+  
+  // 上方2/3：植物大图（白底）
+  const plantCx = W / 2;
+  const plantCy = H * 0.34;
+  const plantSize = 380;
+  drawPlantByName(ctx, data.plant, plantCx, plantCy, plantSize, baseColor, cLight, cMid, cDark);
+  
+  // 下方1/3：植物色渐变背景
+  const divideY = H * 0.66;
+  const botGrad = ctx.createLinearGradient(0, divideY, 0, H);
+  botGrad.addColorStop(0, cLight);
+  botGrad.addColorStop(1, cMid);
+  ctx.fillStyle = botGrad;
+  ctx.fillRect(0, divideY, W, H - divideY);
+  
+  // 分界线装饰
+  ctx.strokeStyle = cDark;
+  ctx.globalAlpha = 0.25;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(100, divideY);
+  ctx.lineTo(W - 100, divideY);
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+  
+  // 中间方框（节气名）
+  const boxW = 260, boxH = 130;
+  const boxX = (W - boxW) / 2;
+  const boxY = divideY + 35;
+  
+  // 方框背景（半透明白）
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  roundRect(ctx, boxX, boxY, boxW, boxH, 12);
+  ctx.fill();
+  // 方框边框
+  ctx.strokeStyle = cDark;
+  ctx.lineWidth = 2.5;
+  roundRect(ctx, boxX, boxY, boxW, boxH, 12);
+  ctx.stroke();
+  // 内层细边框
+  ctx.strokeStyle = baseColor;
+  ctx.lineWidth = 1;
+  ctx.globalAlpha = 0.5;
+  roundRect(ctx, boxX + 8, boxY + 8, boxW - 16, boxH - 16, 8);
+  ctx.stroke();
+  ctx.globalAlpha = 1;
+  
+  // 方框内节气名
+  ctx.fillStyle = cDark;
+  ctx.font = 'bold 68px "Noto Serif SC", serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.shadowColor = 'rgba(0,0,0,0.08)';
+  ctx.shadowBlur = 4;
+  ctx.shadowOffsetY = 2;
+  ctx.fillText(r.name, W/2, boxY + boxH/2 + 4);
+  ctx.shadowColor = 'transparent';
+  ctx.textBaseline = 'alphabetic';
+  
+  // 方框下方：植物名 + 季节日期
+  ctx.fillStyle = cDark;
+  ctx.globalAlpha = 0.75;
+  ctx.font = '18px "Noto Serif SC", serif';
+  ctx.fillText(data.plant + ' · ' + r.season, W/2, boxY + boxH + 32);
+  ctx.globalAlpha = 1;
+  
+  // 箴言区
+  const mottoTop = boxY + boxH + 60;
+  // 箴言标题
+  ctx.fillStyle = cDark;
+  ctx.globalAlpha = 0.8;
+  ctx.font = '20px "Noto Serif SC", serif';
+  ctx.fillText('— 节 气 箴 言 —', W/2, mottoTop);
+  ctx.globalAlpha = 1;
+  // 箴言正文
+  ctx.fillStyle = '#3D3D3D';
+  ctx.font = '24px "Noto Serif SC", serif';
+  ctx.textAlign = 'center';
+  const mottoLines = wrapText(ctx, r.motto, W - 140);
+  mottoLines.forEach((line, i) => {
+    ctx.fillText(line, W/2, mottoTop + 42 + i * 38);
+  });
+  
+  // 定场诗
+  ctx.fillStyle = cDark;
+  ctx.globalAlpha = 0.65;
+  ctx.font = '18px "Noto Serif SC", serif';
+  const poemStartY = mottoTop + 42 + mottoLines.length * 38 + 32;
+  const poemLines = wrapText(ctx, r.poem, W - 160);
+  poemLines.forEach((line, i) => {
+    ctx.fillText(line, W/2, poemStartY + i * 28);
+  });
+  ctx.globalAlpha = 1;
+  
+  // 底部文字
+  ctx.fillStyle = cDark;
+  ctx.globalAlpha = 0.4;
+  ctx.font = '15px "Noto Serif SC", serif';
+  ctx.fillText('万 物 有 时 · 你 亦 有 性', W/2, H - 40);
+  ctx.globalAlpha = 1;
+  
+  return canvas.toDataURL('image/png');
+}
+
+// 根据植物名绘制插画
+function drawPlantByName(ctx, name, cx, cy, size, color, light, mid, dark) {
+  ctx.save();
+  switch(name) {
+    case '梅花': drawPlumBranch(ctx, cx, cy, size, light, color, dark); break;
+    case '兰花': drawOrchid(ctx, cx, cy, size, light, color, dark); break;
+    case '桃花': drawPeachBlossom(ctx, cx, cy, size, light, color, dark); break;
+    case '樱花': drawCherryTree(ctx, cx, cy, size, light, color, dark); break;
+    case '柳': drawWillow(ctx, cx, cy, size, light, color, dark); break;
+    case '牡丹': drawPeony(ctx, cx, cy, size, light, color, dark); break;
+    case '石榴花': drawPomegranate(ctx, cx, cy, size, light, color, dark); break;
+    case '麦穗': drawWheat(ctx, cx, cy, size, light, color, dark); break;
+    case '栀子': drawGardenia(ctx, cx, cy, size, light, color, dark); break;
+    case '荷花': drawLotusFull(ctx, cx, cy, size, light, color, dark); break;
+    case '茉莉': drawJasmine(ctx, cx, cy, size, light, color, dark); break;
+    case '睡莲': drawWaterLily(ctx, cx, cy, size, light, color, dark); break;
+    case '向日葵': drawSunflower(ctx, cx, cy, size, light, color, dark); break;
+    case '玉簪': drawHosta(ctx, cx, cy, size, light, color, dark); break;
+    case '桂花': drawOsmanthus(ctx, cx, cy, size, light, color, dark); break;
+    case '菊花': drawChrysanthemumFull(ctx, cx, cy, size, light, color, dark); break;
+    case '芙蓉': drawHibiscus(ctx, cx, cy, size, light, color, dark); break;
+    case '枫': drawMaple(ctx, cx, cy, size, light, color, dark); break;
+    case '芦苇': drawReed(ctx, cx, cy, size, light, color, dark); break;
+    case '山茶': drawCamellia(ctx, cx, cy, size, light, color, dark); break;
+    case '腊梅': drawWintersweet(ctx, cx, cy, size, light, color, dark); break;
+    case '水仙': drawNarcissus(ctx, cx, cy, size, light, color, dark); break;
+    case '蜡梅': drawWintersweet(ctx, cx, cy, size, light, color, dark); break;
+    case '松': drawPine(ctx, cx, cy, size, light, color, dark); break;
+    default: drawFlower5(ctx, cx, cy, size*0.4, light, color, dark); break;
+  }
+  ctx.restore();
+}
+
+// 五瓣花基础（梅花/桃花/山茶等）
+function drawFlower5(ctx, cx, cy, r, light, color, dark) {
+  ctx.fillStyle = light;
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 5) * Math.PI * 2 - Math.PI / 2;
+    const px = cx + Math.cos(a) * r * 0.55;
+    const py = cy + Math.sin(a) * r * 0.55;
+    ctx.beginPath();
+    ctx.ellipse(px, py, r * 0.5, r * 0.36, a, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.2;
+  ctx.globalAlpha = 0.5;
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 5) * Math.PI * 2 - Math.PI / 2;
+    const px = cx + Math.cos(a) * r * 0.55;
+    const py = cy + Math.sin(a) * r * 0.55;
+    ctx.beginPath();
+    ctx.ellipse(px, py, r * 0.5, r * 0.36, a, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = dark;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r * 0.16, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#F0C75E';
+  ctx.beginPath();
+  ctx.arc(cx, cy, r * 0.08, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+// 多瓣花基础（菊花/向日葵等）
+function drawMultiPetal(ctx, cx, cy, r, layers, light, color, dark) {
+  for (let layer = 0; layer < layers.length; layer++) {
+    const L = layers[layer];
+    ctx.fillStyle = L.c;
+    for (let i = 0; i < L.n; i++) {
+      const a = (i / L.n) * Math.PI * 2 + L.off;
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(a);
+      ctx.beginPath();
+      ctx.ellipse(0, -r * L.d, r * L.w, r * L.h, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+  ctx.fillStyle = dark;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r * 0.13, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+// 梅花带枝
+function drawPlumBranch(ctx, cx, cy, size, light, color, dark) {
+  const r = size * 0.18;
+  // 枝干
+  ctx.strokeStyle = '#5C4A3A';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = size * 0.035;
+  ctx.beginPath();
+  ctx.moveTo(cx - size*0.45, cy + size*0.35);
+  ctx.quadraticCurveTo(cx - size*0.1, cy + size*0.1, cx + size*0.25, cy - size*0.05);
+  ctx.quadraticCurveTo(cx + size*0.4, cy - size*0.15, cx + size*0.5, cy - size*0.25);
+  ctx.stroke();
+  ctx.lineWidth = size * 0.022;
+  ctx.beginPath();
+  ctx.moveTo(cx - size*0.1, cy + size*0.12);
+  ctx.quadraticCurveTo(cx - size*0.3, cy - size*0.05, cx - size*0.45, cy - size*0.15);
+  ctx.stroke();
+  // 花
+  drawFlower5(ctx, cx, cy, r*1.3, light, color, dark);
+  drawFlower5(ctx, cx - size*0.3, cy - size*0.08, r*0.8, light, color, dark);
+  drawFlower5(ctx, cx + size*0.32, cy - size*0.18, r*0.85, light, color, dark);
+  drawFlower5(ctx, cx - size*0.12, cy + size*0.28, r*0.65, light, color, dark);
+  drawFlower5(ctx, cx + size*0.2, cy + size*0.2, r*0.6, light, color, dark);
+  // 花苞
+  ctx.fillStyle = dark;
+  [[cx-size*0.2, cy+size*0.18],[cx+size*0.1, cy-size*0.1]].forEach(([bx,by]) => {
+    ctx.beginPath(); ctx.arc(bx, by, size*0.02, 0, Math.PI*2); ctx.fill();
+  });
+}
+
+// 兰花
+function drawOrchid(ctx, cx, cy, size, light, color, dark) {
+  // 长叶
+  ctx.strokeStyle = color;
+  ctx.lineWidth = size * 0.04;
+  ctx.lineCap = 'round';
+  for (let i = -3; i <= 3; i++) {
+    ctx.beginPath();
+    ctx.moveTo(cx + i * size * 0.04, cy + size * 0.4);
+    ctx.quadraticCurveTo(cx + i * size * 0.12, cy, cx + i * size * 0.18, cy - size * 0.35);
+    ctx.stroke();
+  }
+  // 兰花花朵（中心）
+  const r = size * 0.1;
+  drawFlower5(ctx, cx, cy - size*0.1, r, light, color, dark);
+  drawFlower5(ctx, cx - size*0.1, cy - size*0.25, r*0.8, light, color, dark);
+  drawFlower5(ctx, cx + size*0.12, cy - size*0.22, r*0.75, light, color, dark);
+}
+
+// 桃花
+function drawPeachBlossom(ctx, cx, cy, size, light, color, dark) {
+  // 细枝
+  ctx.strokeStyle = '#6B5B4A';
+  ctx.lineWidth = size * 0.02;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(cx - size*0.3, cy + size*0.3);
+  ctx.lineTo(cx + size*0.3, cy - size*0.1);
+  ctx.stroke();
+  const r = size * 0.16;
+  drawFlower5(ctx, cx, cy, r*1.2, light, color, dark);
+  drawFlower5(ctx, cx - size*0.22, cy + size*0.05, r*0.7, light, color, dark);
+  drawFlower5(ctx, cx + size*0.25, cy - size*0.12, r*0.75, light, color, dark);
+  drawFlower5(ctx, cx - size*0.08, cy + size*0.22, r*0.6, light, color, dark);
+  // 飘落花瓣
+  ctx.fillStyle = light;
+  for (let i = 0; i < 12; i++) {
+    const px = cx + (Math.random()-0.5) * size;
+    const py = cy + (Math.random()-0.5) * size * 0.8;
+    ctx.beginPath();
+    ctx.ellipse(px, py, size*0.02, size*0.035, Math.random()*Math.PI, 0, Math.PI*2);
+    ctx.fill();
+  }
+}
+
+// 樱花
+function drawCherryTree(ctx, cx, cy, size, light, color, dark) {
+  // 粗枝
+  ctx.strokeStyle = '#6B5B4A';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = size * 0.04;
+  ctx.beginPath();
+  ctx.moveTo(cx - size*0.4, cy + size*0.35);
+  ctx.quadraticCurveTo(cx - size*0.1, cy + size*0.05, cx + size*0.3, cy - size*0.1);
+  ctx.stroke();
+  const r = size * 0.14;
+  drawFlower5(ctx, cx, cy, r*1.3, light, color, dark);
+  drawFlower5(ctx, cx - size*0.28, cy + size*0.02, r*0.8, light, color, dark);
+  drawFlower5(ctx, cx + size*0.3, cy - size*0.12, r*0.85, light, color, dark);
+  drawFlower5(ctx, cx - size*0.15, cy + size*0.28, r*0.7, light, color, dark);
+  drawFlower5(ctx, cx + size*0.18, cy + size*0.22, r*0.65, light, color, dark);
+  drawFlower5(ctx, cx - size*0.42, cy - size*0.1, r*0.55, light, color, dark);
+  drawFlower5(ctx, cx + size*0.42, cy - size*0.2, r*0.5, light, color, dark);
+  // 花瓣雨
+  ctx.fillStyle = light;
+  ctx.globalAlpha = 0.6;
+  for (let i = 0; i < 18; i++) {
+    const px = cx + (Math.random()-0.5) * size * 1.1;
+    const py = cy + (Math.random()-0.5) * size * 0.9;
+    ctx.beginPath();
+    ctx.ellipse(px, py, size*0.018, size*0.03, Math.random()*Math.PI, 0, Math.PI*2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+// 柳
+function drawWillow(ctx, cx, cy, size, light, color, dark) {
+  // 主干
+  ctx.strokeStyle = '#6B5B4A';
+  ctx.lineWidth = size * 0.05;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(cx, cy + size * 0.4);
+  ctx.lineTo(cx, cy - size * 0.1);
+  ctx.stroke();
+  // 垂柳枝条
+  ctx.strokeStyle = color;
+  ctx.lineWidth = size * 0.015;
+  for (let i = -4; i <= 4; i++) {
+    const bx = cx + i * size * 0.06;
+    ctx.beginPath();
+    ctx.moveTo(bx, cy - size * 0.1);
+    ctx.quadraticCurveTo(bx + i * size * 0.03, cy + size * 0.2, bx + i * size * 0.05, cy + size * 0.4);
+    ctx.stroke();
+    // 柳叶
+    for (let j = 0; j < 8; j++) {
+      const ly = cy - size * 0.05 + j * size * 0.06;
+      const lx = bx + (i * size * 0.05) * (j / 8);
+      ctx.fillStyle = light;
+      ctx.beginPath();
+      ctx.ellipse(lx + (j%2? size*0.02 : -size*0.02), ly, size*0.018, size*0.04, Math.PI/4, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+}
+
+// 牡丹
+function drawPeony(ctx, cx, cy, size, light, color, dark) {
+  const r = size * 0.32;
+  // 外层大叶
+  ctx.fillStyle = shadeColor(color, 25);
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * Math.PI * 2;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(a);
+    ctx.beginPath();
+    ctx.ellipse(0, -r * 0.6, r * 0.28, r * 0.6, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+  // 中层
+  ctx.fillStyle = light;
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2 + 0.3;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(a);
+    ctx.beginPath();
+    ctx.ellipse(0, -r * 0.4, r * 0.22, r * 0.42, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+  // 内层
+  ctx.fillStyle = color;
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 5) * Math.PI * 2 + 0.6;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(a);
+    ctx.beginPath();
+    ctx.ellipse(0, -r * 0.2, r * 0.16, r * 0.24, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+  // 花心
+  ctx.fillStyle = '#F0C75E';
+  ctx.beginPath();
+  ctx.arc(cx, cy, r * 0.12, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+// 石榴花
+function drawPomegranate(ctx, cx, cy, size, light, color, dark) {
+  // 钟形花
+  const r = size * 0.28;
+  // 花萼（钟形）
+  ctx.fillStyle = dark;
+  ctx.beginPath();
+  ctx.moveTo(cx - r*0.4, cy + r*0.3);
+  ctx.quadraticCurveTo(cx - r*0.6, cy - r*0.2, cx - r*0.25, cy - r*0.4);
+  ctx.lineTo(cx + r*0.25, cy - r*0.4);
+  ctx.quadraticCurveTo(cx + r*0.6, cy - r*0.2, cx + r*0.4, cy + r*0.3);
+  ctx.closePath();
+  ctx.fill();
+  // 花瓣
+  ctx.fillStyle = light;
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2 - Math.PI/2;
+    ctx.save();
+    ctx.translate(cx, cy - r*0.1);
+    ctx.rotate(a);
+    ctx.beginPath();
+    ctx.ellipse(0, -r*0.3, r*0.18, r*0.32, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+  // 花蕊
+  ctx.fillStyle = '#F0C75E';
+  ctx.beginPath();
+  ctx.arc(cx, cy - r*0.1, r*0.08, 0, Math.PI*2);
+  ctx.fill();
+}
+
+// 麦穗
+function drawWheat(ctx, cx, cy, size, light, color, dark) {
+  // 麦秆
+  ctx.strokeStyle = color;
+  ctx.lineWidth = size * 0.03;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(cx, cy + size * 0.4);
+  ctx.lineTo(cx, cy - size * 0.35);
+  ctx.stroke();
+  // 麦粒
+  for (let i = 0; i < 10; i++) {
+    const y = cy - size * 0.3 + i * size * 0.06;
+    const w = size * 0.06;
+    ctx.fillStyle = light;
+    ctx.beginPath();
+    ctx.ellipse(cx - w, y, w*0.6, size*0.03, -0.4, 0, Math.PI*2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(cx + w, y, w*0.6, size*0.03, 0.4, 0, Math.PI*2);
+    ctx.fill();
+  }
+  // 麦芒
+  ctx.strokeStyle = dark;
+  ctx.lineWidth = 1;
+  for (let i = 0; i < 8; i++) {
+    const y = cy - size * 0.25 + i * size * 0.06;
+    ctx.beginPath();
+    ctx.moveTo(cx - size*0.06, y);
+    ctx.lineTo(cx - size*0.15, y - size*0.04);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(cx + size*0.06, y);
+    ctx.lineTo(cx + size*0.15, y - size*0.04);
+    ctx.stroke();
+  }
+  // 顶端
+  ctx.fillStyle = light;
+  ctx.beginPath();
+  ctx.ellipse(cx, cy - size*0.35, size*0.04, size*0.06, 0, 0, Math.PI*2);
+  ctx.fill();
+}
+
+// 栀子
+function drawGardenia(ctx, cx, cy, size, light, color, dark) {
+  // 叶
+  ctx.fillStyle = light;
+  for (let i = 0; i < 4; i++) {
+    const a = (i / 4) * Math.PI * 2;
+    ctx.save();
+    ctx.translate(cx, cy + size*0.15);
+    ctx.rotate(a);
+    ctx.beginPath();
+    ctx.ellipse(0, -size*0.18, size*0.06, size*0.2, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+  // 重瓣白花
+  const r = size * 0.22;
+  for (let layer = 0; layer < 3; layer++) {
+    ctx.fillStyle = layer === 0 ? shadeColor(color, 30) : (layer === 1 ? light : color);
+    const n = 8 - layer * 2;
+    const off = layer * 0.4;
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2 + off;
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(a);
+      ctx.beginPath();
+      ctx.ellipse(0, -r * (0.5 - layer*0.1), r * 0.16, r * (0.4 - layer*0.08), 0, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+  ctx.fillStyle = '#F0C75E';
+  ctx.beginPath();
+  ctx.arc(cx, cy, r*0.1, 0, Math.PI*2);
+  ctx.fill();
+}
+
+// 荷花（带叶）
+function drawLotusFull(ctx, cx, cy, size, light, color, dark) {
+  const r = size * 0.28;
+  // 荷叶
+  ctx.fillStyle = shadeColor(color, -10);
+  ctx.globalAlpha = 0.4;
+  ctx.beginPath();
+  ctx.ellipse(cx - size*0.28, cy + size*0.25, size*0.22, size*0.1, -0.2, 0, Math.PI*2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(cx + size*0.3, cy + size*0.22, size*0.24, size*0.11, 0.2, 0, Math.PI*2);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  // 荷花
+  for (let layer = 0; layer < 3; layer++) {
+    ctx.fillStyle = layer === 0 ? light : (layer === 1 ? color : shadeColor(color, -10));
+    const n = 10 - layer * 2;
+    const off = layer * 0.3;
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2 + off;
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(a);
+      ctx.beginPath();
+      ctx.ellipse(0, -r * (0.55 - layer*0.1), r * 0.2, r * (0.5 - layer*0.1), 0, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+  // 花心
+  ctx.fillStyle = '#F0C75E';
+  ctx.beginPath();
+  ctx.arc(cx, cy, r*0.14, 0, Math.PI*2);
+  ctx.fill();
+}
+
+// 茉莉
+function drawJasmine(ctx, cx, cy, size, light, color, dark) {
+  // 叶
+  ctx.fillStyle = shadeColor(color, 15);
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 5) * Math.PI * 2 + 0.3;
+    ctx.save();
+    ctx.translate(cx, cy + size*0.1);
+    ctx.rotate(a);
+    ctx.beginPath();
+    ctx.ellipse(0, -size*0.22, size*0.05, size*0.18, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+  // 多朵小白花
+  const r = size * 0.1;
+  drawFlower5(ctx, cx, cy - size*0.05, r, light, color, dark);
+  drawFlower5(ctx, cx - size*0.18, cy - size*0.2, r*0.8, light, color, dark);
+  drawFlower5(ctx, cx + size*0.15, cy - size*0.18, r*0.75, light, color, dark);
+  drawFlower5(ctx, cx - size*0.1, cy + size*0.1, r*0.7, light, color, dark);
+  drawFlower5(ctx, cx + size*0.12, cy + size*0.12, r*0.65, light, color, dark);
+}
+
+// 睡莲
+function drawWaterLily(ctx, cx, cy, size, light, color, dark) {
+  const r = size * 0.3;
+  // 浮叶
+  ctx.fillStyle = shadeColor(color, -15);
+  ctx.globalAlpha = 0.35;
+  ctx.beginPath();
+  ctx.ellipse(cx - size*0.25, cy + size*0.28, size*0.2, size*0.08, -0.3, 0, Math.PI*2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(cx + size*0.28, cy + size*0.25, size*0.22, size*0.09, 0.3, 0, Math.PI*2);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  // 睡莲花（平展）
+  for (let layer = 0; layer < 2; layer++) {
+    ctx.fillStyle = layer === 0 ? light : color;
+    const n = 10;
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2 + layer * 0.3;
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(a);
+      ctx.beginPath();
+      ctx.ellipse(0, -r * (0.45 - layer*0.12), r * 0.22, r * (0.42 - layer*0.1), 0, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+  ctx.fillStyle = '#F0C75E';
+  ctx.beginPath();
+  ctx.arc(cx, cy, r*0.12, 0, Math.PI*2);
+  ctx.fill();
+}
+
+// 向日葵
+function drawSunflower(ctx, cx, cy, size, light, color, dark) {
+  const r = size * 0.3;
+  // 花瓣
+  ctx.fillStyle = light;
+  for (let i = 0; i < 16; i++) {
+    const a = (i / 16) * Math.PI * 2;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(a);
+    ctx.beginPath();
+    ctx.ellipse(0, -r * 0.55, r * 0.16, r * 0.5, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+  ctx.fillStyle = color;
+  for (let i = 0; i < 12; i++) {
+    const a = (i / 12) * Math.PI * 2 + 0.15;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(a);
+    ctx.beginPath();
+    ctx.ellipse(0, -r * 0.4, r * 0.14, r * 0.38, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+  // 花盘
+  ctx.fillStyle = dark;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r * 0.3, 0, Math.PI*2);
+  ctx.fill();
+  // 花盘纹理
+  ctx.fillStyle = shadeColor(dark, 20);
+  for (let i = 0; i < 30; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const rr = Math.random() * r * 0.25;
+    ctx.beginPath();
+    ctx.arc(cx + Math.cos(a)*rr, cy + Math.sin(a)*rr, r*0.02, 0, Math.PI*2);
+    ctx.fill();
+  }
+}
+
+// 玉簪
+function drawHosta(ctx, cx, cy, size, light, color, dark) {
+  // 大叶
+  ctx.fillStyle = light;
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2;
+    ctx.save();
+    ctx.translate(cx, cy + size*0.2);
+    ctx.rotate(a);
+    ctx.beginPath();
+    ctx.ellipse(0, -size*0.25, size*0.09, size*0.28, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+  // 花茎
+  ctx.strokeStyle = color;
+  ctx.lineWidth = size * 0.02;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy + size*0.2);
+  ctx.lineTo(cx, cy - size*0.3);
+  ctx.stroke();
+  // 花（筒状）
+  const r = size * 0.08;
+  ctx.fillStyle = shadeColor(color, 30);
+  for (let i = 0; i < 5; i++) {
+    const y = cy - size*0.3 + i * size*0.06;
+    ctx.beginPath();
+    ctx.ellipse(cx + (i%2? size*0.04 : -size*0.04), y, r*0.5, r, 0, 0, Math.PI*2);
+    ctx.fill();
+  }
+}
+
+// 桂花
+function drawOsmanthus(ctx, cx, cy, size, light, color, dark) {
+  // 枝叶
+  ctx.fillStyle = shadeColor(color, 20);
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 5) * Math.PI * 2;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(a);
+    ctx.beginPath();
+    ctx.ellipse(0, -size*0.2, size*0.08, size*0.18, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+  // 小朵桂花（四瓣）
+  const r = size * 0.06;
+  function drawTinyFlower(fx, fy, fr) {
+    ctx.fillStyle = light;
+    for (let i = 0; i < 4; i++) {
+      const a = (i / 4) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.ellipse(fx + Math.cos(a)*fr*0.5, fy + Math.sin(a)*fr*0.5, fr*0.4, fr*0.25, a, 0, Math.PI*2);
+      ctx.fill();
+    }
+    ctx.fillStyle = dark;
+    ctx.beginPath();
+    ctx.arc(fx, fy, fr*0.15, 0, Math.PI*2);
+    ctx.fill();
+  }
+  drawTinyFlower(cx, cy, r*1.5);
+  drawTinyFlower(cx - size*0.15, cy - size*0.1, r);
+  drawTinyFlower(cx + size*0.12, cy - size*0.12, r);
+  drawTinyFlower(cx - size*0.08, cy + size*0.15, r*0.8);
+  drawTinyFlower(cx + size*0.15, cy + size*0.1, r*0.8);
+  drawTinyFlower(cx - size*0.25, cy + size*0.05, r*0.7);
+  drawTinyFlower(cx + size*0.25, cy - size*0.02, r*0.7);
+}
+
+// 菊花
+function drawChrysanthemumFull(ctx, cx, cy, size, light, color, dark) {
+  const r = size * 0.32;
+  // 外层细长花瓣
+  ctx.fillStyle = light;
+  for (let i = 0; i < 28; i++) {
+    const a = (i / 28) * Math.PI * 2;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(a);
+    ctx.beginPath();
+    ctx.ellipse(0, -r * 0.5, r * 0.09, r * 0.5, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+  // 中层
+  ctx.fillStyle = color;
+  for (let i = 0; i < 20; i++) {
+    const a = (i / 20) * Math.PI * 2 + 0.1;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(a);
+    ctx.beginPath();
+    ctx.ellipse(0, -r * 0.35, r * 0.08, r * 0.35, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+  // 内层
+  ctx.fillStyle = dark;
+  ctx.globalAlpha = 0.85;
+  for (let i = 0; i < 14; i++) {
+    const a = (i / 14) * Math.PI * 2 + 0.2;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(a);
+    ctx.beginPath();
+    ctx.ellipse(0, -r * 0.2, r * 0.07, r * 0.22, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = shadeColor(dark, 10);
+  ctx.beginPath();
+  ctx.arc(cx, cy, r * 0.12, 0, Math.PI*2);
+  ctx.fill();
+}
+
+// 芙蓉
+function drawHibiscus(ctx, cx, cy, size, light, color, dark) {
+  const r = size * 0.3;
+  // 5大瓣
+  ctx.fillStyle = light;
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 5) * Math.PI * 2 - Math.PI/2;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(a);
+    ctx.beginPath();
+    ctx.ellipse(0, -r * 0.45, r * 0.38, r * 0.5, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+  // 花瓣纹理
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1;
+  ctx.globalAlpha = 0.4;
+  for (let i = 0; i < 5; i++) {
+    const a = (i / 5) * Math.PI * 2 - Math.PI/2;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(a);
+    for (let j = -2; j <= 2; j++) {
+      ctx.beginPath();
+      ctx.moveTo(j * r * 0.1, 0);
+      ctx.lineTo(j * r * 0.08, -r * 0.4);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+  ctx.globalAlpha = 1;
+  // 长花蕊
+  ctx.strokeStyle = '#F0C75E';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(cx, cy - r * 0.5);
+  ctx.stroke();
+  ctx.fillStyle = '#F0C75E';
+  for (let i = 0; i < 6; i++) {
+    ctx.beginPath();
+    ctx.arc(cx, cy - r * 0.15 - i * r * 0.08, r * 0.04, 0, Math.PI*2);
+    ctx.fill();
+  }
+}
+
+// 枫
+function drawMaple(ctx, cx, cy, size, light, color, dark) {
+  // 枝干
+  ctx.strokeStyle = '#6B5B4A';
+  ctx.lineWidth = size * 0.035;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(cx, cy + size * 0.4);
+  ctx.lineTo(cx, cy - size * 0.2);
+  ctx.stroke();
+  // 枫叶
+  function drawMapleLeaf(lx, ly, lr, rot) {
+    ctx.save();
+    ctx.translate(lx, ly);
+    ctx.rotate(rot);
+    ctx.fillStyle = light;
+    // 5裂叶
+    ctx.beginPath();
+    for (let i = 0; i < 5; i++) {
+      const a = (i / 5) * Math.PI * 2 - Math.PI/2;
+      ctx.lineTo(Math.cos(a) * lr, Math.sin(a) * lr);
+      const a2 = a + Math.PI/5;
+      ctx.lineTo(Math.cos(a2) * lr * 0.4, Math.sin(a2) * lr * 0.4);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    ctx.globalAlpha = 0.5;
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+    ctx.restore();
+  }
+  drawMapleLeaf(cx, cy, size*0.25, 0);
+  drawMapleLeaf(cx - size*0.2, cy - size*0.1, size*0.18, -0.5);
+  drawMapleLeaf(cx + size*0.22, cy - size*0.05, size*0.17, 0.6);
+  drawMapleLeaf(cx - size*0.12, cy + size*0.2, size*0.14, 0.3);
+  drawMapleLeaf(cx + size*0.15, cy + size*0.18, size*0.13, -0.4);
+  // 飘落枫叶
+  ctx.fillStyle = color;
+  ctx.globalAlpha = 0.6;
+  drawMapleLeaf(cx - size*0.35, cy + size*0.3, size*0.08, 1);
+  drawMapleLeaf(cx + size*0.38, cy + size*0.25, size*0.07, -0.8);
+  ctx.globalAlpha = 1;
+}
+
+// 芦苇
+function drawReed(ctx, cx, cy, size, light, color, dark) {
+  // 芦苇秆
+  ctx.strokeStyle = color;
+  ctx.lineWidth = size * 0.015;
+  for (let i = -3; i <= 3; i++) {
+    const x = cx + i * size * 0.06;
+    ctx.beginPath();
+    ctx.moveTo(x, cy + size * 0.4);
+    ctx.lineTo(x + i * size * 0.01, cy - size * 0.2);
+    ctx.stroke();
+  }
+  // 芦苇花（穗状）
+  for (let i = -3; i <= 3; i++) {
+    const x = cx + i * size * 0.06 + i * size * 0.01;
+    const y = cy - size * 0.2;
+    ctx.fillStyle = light;
+    ctx.beginPath();
+    ctx.ellipse(x, y - size*0.08, size*0.025, size*0.1, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle = shadeColor(color, 10);
+    for (let j = 0; j < 8; j++) {
+      ctx.beginPath();
+      ctx.ellipse(x + (Math.random()-0.5)*size*0.03, y - size*0.04 + j*size*0.02, size*0.015, size*0.03, Math.random()*0.5, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+}
+
+// 山茶
+function drawCamellia(ctx, cx, cy, size, light, color, dark) {
+  const r = size * 0.28;
+  // 重瓣
+  for (let layer = 0; layer < 3; layer++) {
+    ctx.fillStyle = layer === 0 ? light : (layer === 1 ? color : shadeColor(color, -10));
+    const n = 8 - layer * 2;
+    const off = layer * 0.5;
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2 + off;
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(a);
+      ctx.beginPath();
+      ctx.ellipse(0, -r * (0.5 - layer*0.12), r * 0.24, r * (0.45 - layer*0.1), 0, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+  // 花蕊
+  ctx.fillStyle = '#F0C75E';
+  ctx.beginPath();
+  ctx.arc(cx, cy, r*0.1, 0, Math.PI*2);
+  ctx.fill();
+  // 叶
+  ctx.fillStyle = shadeColor(color, 10);
+  ctx.beginPath();
+  ctx.ellipse(cx - r*0.9, cy + r*0.3, r*0.3, r*0.15, -0.5, 0, Math.PI*2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(cx + r*0.9, cy + r*0.25, r*0.3, r*0.15, 0.5, 0, Math.PI*2);
+  ctx.fill();
+}
+
+// 腊梅
+function drawWintersweet(ctx, cx, cy, size, light, color, dark) {
+  // 虬枝
+  ctx.strokeStyle = '#5C4A3A';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = size * 0.04;
+  ctx.beginPath();
+  ctx.moveTo(cx - size*0.4, cy + size*0.35);
+  ctx.quadraticCurveTo(cx - size*0.1, cy + size*0.05, cx + size*0.3, cy - size*0.15);
+  ctx.stroke();
+  // 蜡质花（半透明）
+  const r = size * 0.1;
+  function drawWaxFlower(fx, fy, fr) {
+    ctx.fillStyle = light;
+    ctx.globalAlpha = 0.85;
+    for (let i = 0; i < 5; i++) {
+      const a = (i / 5) * Math.PI * 2 - Math.PI/2;
+      const px = fx + Math.cos(a) * fr * 0.5;
+      const py = fy + Math.sin(a) * fr * 0.5;
+      ctx.beginPath();
+      ctx.ellipse(px, py, fr*0.4, fr*0.28, a, 0, Math.PI*2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = dark;
+    ctx.beginPath();
+    ctx.arc(fx, fy, fr*0.12, 0, Math.PI*2);
+    ctx.fill();
+  }
+  drawWaxFlower(cx, cy, r*1.3);
+  drawWaxFlower(cx - size*0.28, cy + size*0.02, r*0.8);
+  drawWaxFlower(cx + size*0.3, cy - size*0.18, r*0.85);
+  drawWaxFlower(cx - size*0.12, cy + size*0.28, r*0.65);
+  drawWaxFlower(cx + size*0.18, cy + size*0.2, r*0.6);
+}
+
+// 水仙
+function drawNarcissus(ctx, cx, cy, size, light, color, dark) {
+  // 水仙叶（长条）
+  ctx.fillStyle = shadeColor(color, 15);
+  for (let i = -3; i <= 3; i++) {
+    ctx.save();
+    ctx.translate(cx + i * size * 0.03, cy + size*0.3);
+    ctx.rotate(i * 0.15);
+    ctx.beginPath();
+    ctx.ellipse(0, -size*0.2, size*0.03, size*0.28, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+  // 花茎
+  ctx.strokeStyle = color;
+  ctx.lineWidth = size * 0.02;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy + size*0.25);
+  ctx.lineTo(cx, cy - size*0.15);
+  ctx.stroke();
+  // 水仙花（6瓣+副冠）
+  const r = size * 0.16;
+  ctx.fillStyle = light;
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2;
+    const px = cx + Math.cos(a) * r * 0.5;
+    const py = cy - size*0.15 + Math.sin(a) * r * 0.5;
+    ctx.beginPath();
+    ctx.ellipse(px, py, r*0.3, r*0.5, a, 0, Math.PI*2);
+    ctx.fill();
+  }
+  // 副冠（杯状）
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.ellipse(cx, cy - size*0.15, r*0.25, r*0.2, 0, 0, Math.PI*2);
+  ctx.fill();
+  ctx.strokeStyle = dark;
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+}
+
+// 松
+function drawPine(ctx, cx, cy, size, light, color, dark) {
+  // 树干
+  ctx.strokeStyle = '#5C4A3A';
+  ctx.lineWidth = size * 0.05;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(cx, cy + size * 0.4);
+  ctx.lineTo(cx, cy - size * 0.1);
+  ctx.stroke();
+  // 松针束
+  ctx.strokeStyle = color;
+  ctx.lineWidth = size * 0.012;
+  function drawPineCluster(px, py, pr) {
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.moveTo(px, py);
+      ctx.lineTo(px + Math.cos(a) * pr, py + Math.sin(a) * pr);
+      ctx.stroke();
+    }
+    ctx.fillStyle = dark;
+    ctx.beginPath();
+    ctx.arc(px, py, pr*0.15, 0, Math.PI*2);
+    ctx.fill();
+  }
+  drawPineCluster(cx, cy, size*0.12);
+  drawPineCluster(cx - size*0.22, cy + size*0.05, size*0.1);
+  drawPineCluster(cx + size*0.2, cy + size*0.02, size*0.1);
+  drawPineCluster(cx - size*0.1, cy - size*0.18, size*0.09);
+  drawPineCluster(cx + size*0.12, cy - size*0.15, size*0.085);
+  drawPineCluster(cx, cy - size*0.3, size*0.08);
+}
+
+// 宣纸纹理
+function drawPaperTexture(ctx, W, H) {
+  const imgData = ctx.getImageData(0, 0, W, H);
+  const data = imgData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    const noise = (Math.random() - 0.5) * 8;
+    data[i] = Math.max(0, Math.min(255, data[i] + noise));
+    data[i+1] = Math.max(0, Math.min(255, data[i+1] + noise));
+    data[i+2] = Math.max(0, Math.min(255, data[i+2] + noise));
+  }
+  ctx.putImageData(imgData, 0, 0);
+}
+
+// 红色印章
+function drawSeal(ctx, x, y, name) {
+  ctx.save();
+  const size = 58;
+  ctx.fillStyle = '#B85450';
+  roundRect(ctx, x, y, size, size, 6);
+  ctx.fill();
+  ctx.strokeStyle = '#8B3A38';
+  ctx.lineWidth = 2;
+  roundRect(ctx, x + 3, y + 3, size - 6, size - 6, 4);
+  ctx.stroke();
+  ctx.fillStyle = '#F5F2ED';
+  ctx.font = 'bold 16px "Noto Serif SC", serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  const sealText = name.length >= 2 ? name.slice(-2) : name;
+  ctx.fillText(sealText, x + size/2, y + size/2 + 2);
+  ctx.textBaseline = 'alphabetic';
+  ctx.restore();
+}
+
+function shadeColor(color, percent) {
+  const num = parseInt(color.slice(1), 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + percent));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + percent));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + percent));
+  return '#' + (r << 16 | g << 8 | b).toString(16).padStart(6, '0');
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function wrapText(ctx, text, maxWidth) {
+  const lines = [];
+  let line = '';
+  for (let char of text) {
+    const testLine = line + char;
+    if (ctx.measureText(testLine).width > maxWidth && line) {
+      lines.push(line);
+      line = char;
+    } else {
+      line = testLine;
+    }
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+</script>
+
+</body>
+</html>
